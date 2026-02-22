@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { fetchJobs } from '../api/client'
+import { fetchJobs, Job } from '../api/client'
 import JobStatus from '../components/JobStatus'
 
 const Jobs = () => {
@@ -70,7 +70,7 @@ const Jobs = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {jobs.map((job: any) => (
+            {jobs.map((job: Job) => (
               <div key={job.id} className="relative">
                 <JobStatus
                   jobId={job.id}

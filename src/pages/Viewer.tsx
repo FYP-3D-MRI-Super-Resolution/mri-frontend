@@ -154,7 +154,7 @@ const Viewer = () => {
               Quality Metrics
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {Object.entries(job.metrics).map(([key, value]: [string, any]) => (
+              {Object.entries(job.metrics).map(([key, value]: [string, number]) => (
                 <div key={key} className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded">
                   <p className="text-sm text-gray-600 dark:text-gray-400 uppercase">
                     {key}

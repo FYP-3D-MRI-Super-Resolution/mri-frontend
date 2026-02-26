@@ -1,21 +1,21 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
-import { jobsService } from '@/api/services'
+
+import { useJobs } from '@/hooks'
 import type { Job } from '@/types'
-import type { JobsListResponse } from '@/types/api.types'
-import JobsTable from '../../../components/JobsTable'
+import JobsTable from './components/JobsTable'
 import { JobsTableSkeleton } from '../../../components/Skeleton'
+import JobsHeader from './components/JobsHeader'
+import JobsEmpty from './components/JobsEmpty'
+import JobsPagination from './components/JobsPagination'
+import { DEFAULT_PAGE_SIZE, JOBS_REFETCH_INTERVAL } from './constants'
 
 const Jobs = () => {
   const [page, setPage] = useState(1)
-  const [size] = useState(10)
 
-  const { data, isLoading, error, refetch } = useQuery<JobsListResponse>({
-    queryKey: ['jobs', page, size],
-    queryFn: () => jobsService.getJobs({ page, size }),
-    refetchInterval: 5000, // Refetch every 5 seconds
-  })
+  const { data, isLoading, error, refetch, isFetching } = useJobs(
+    { page, size: DEFAULT_PAGE_SIZE },
+    { refetchInterval: JOBS_REFETCH_INTERVAL }
+  )
 
   const jobs = data?.items ?? []
   const totalPages = data?.pages ?? 1
@@ -31,12 +31,10 @@ const Jobs = () => {
   if (error) {
     return (
       <div className="px-4 py-8">
-        <div className="w-full">
-          <div className="card bg-red-50 border border-red-200">
-            <p className="text-red-700">
-              Error loading jobs: {error instanceof Error ? error.message : 'Unknown error'}
-            </p>
-          </div>
+        <div className="card border border-red-500/30 bg-red-500/10">
+          <p className="text-red-400">
+            Error loading jobs: {error instanceof Error ? error.message : 'Unknown error'}
+          </p>
         </div>
       </div>
     )
@@ -45,61 +43,19 @@ const Jobs = () => {
   return (
     <div className="px-4 py-8">
       <div className="w-full">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Processing Jobs
-            </h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Track the status of your preprocessing and inference jobs
-            </p>
-          </div>
-          <button
-            onClick={() => refetch()}
-            className="btn btn-secondary"
-          >
-            🔄 Refresh
-          </button>
-        </div>
+        <JobsHeader onRefresh={refetch} isRefreshing={isFetching} />
 
         {jobs.length === 0 ? (
-          <div className="card text-center py-12">
-            <div className="text-6xl mb-4">📋</div>
-            <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              No Jobs Yet
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Upload MRI scans to start processing
-            </p>
-            <Link to="/upload" className="btn btn-primary inline-block">
-              Upload Files
-            </Link>
-          </div>
+          <JobsEmpty />
         ) : (
           <div className="space-y-4">
             <JobsTable jobs={jobs as Job[]} />
-
-            <div className="flex items-center justify-between pt-4">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Page {page} of {totalPages}
-              </p>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => setPage((prev) => Math.max(1, prev - 1))}
-                  disabled={page <= 1}
-                  className="btn btn-secondary text-sm disabled:opacity-50"
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
-                  disabled={page >= totalPages}
-                  className="btn btn-secondary text-sm disabled:opacity-50"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+            <JobsPagination
+              page={page}
+              totalPages={totalPages}
+              onPrev={() => setPage((p) => Math.max(1, p - 1))}
+              onNext={() => setPage((p) => Math.min(totalPages, p + 1))}
+            />
           </div>
         )}
       </div>

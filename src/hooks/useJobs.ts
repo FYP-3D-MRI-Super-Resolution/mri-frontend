@@ -6,17 +6,21 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { jobsService } from '@/api/services'
 import { QUERY_KEYS, JOB_CONFIG } from '@/constants'
-import type { JobsListRequest } from '@/types/api.types'
+import type { JobsListRequest, JobsListResponse } from '@/types/api.types'
 import type { Job } from '@/types'
 
 /**
  * Hook to get list of jobs
  */
-export const useJobs = (params?: JobsListRequest) => {
-  return useQuery({
+export const useJobs = (
+  params?: JobsListRequest,
+  options?: { refetchInterval?: number | false }
+) => {
+  return useQuery<JobsListResponse>({
     queryKey: QUERY_KEYS.JOBS.LIST(params as Record<string, unknown>),
     queryFn: () => jobsService.getJobs(params),
     staleTime: 30 * 1000, // 30 seconds
+    refetchInterval: options?.refetchInterval,
   })
 }
 

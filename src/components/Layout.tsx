@@ -32,7 +32,7 @@ const Layout = ({ children }: LayoutProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       {/* Navigation */}
       <nav className="bg-white dark:bg-gray-800 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -98,12 +98,12 @@ const Layout = ({ children }: LayoutProps) => {
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      {/* Main Content - Grows to fill available space */}
+      <main className="flex-1 max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">
         {children}
       </main>
 
-      {/* Footer */}
+      {/* Footer - Always at bottom */}
       <footer className="bg-white dark:bg-gray-800 shadow-lg mt-auto">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm text-gray-500">

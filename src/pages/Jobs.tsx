@@ -22,7 +22,7 @@ const Jobs = () => {
   if (isLoading) {
     return (
       <div className="px-4 py-8">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="w-full text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading jobs...</p>
         </div>
@@ -33,7 +33,7 @@ const Jobs = () => {
   if (error) {
     return (
       <div className="px-4 py-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="w-full">
           <div className="card bg-red-50 border border-red-200">
             <p className="text-red-700">
               Error loading jobs: {error instanceof Error ? error.message : 'Unknown error'}
@@ -46,7 +46,7 @@ const Jobs = () => {
 
   return (
     <div className="px-4 py-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="w-full">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">

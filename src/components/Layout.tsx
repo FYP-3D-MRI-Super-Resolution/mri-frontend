@@ -36,7 +36,7 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="min-h-screen flex flex-col bg-transparent">
       {/* Navigation */}
       <nav className="border-b border-slate-700/50 bg-slate-900/60 backdrop-blur">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center gap-3">
               <button
@@ -96,7 +96,7 @@ const Layout = ({ children }: LayoutProps) => {
 
       {/* Main Content - Grows to fill available space */}
       <div className="flex-1 w-full">
-        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="relative lg:flex lg:gap-8">
             {/* Mobile Overlay */}
             {sidebarOpen && (
@@ -157,7 +157,7 @@ const Layout = ({ children }: LayoutProps) => {
 
       {/* Footer - Always at bottom */}
       <footer className="border-t border-slate-700/50 bg-slate-900/60 backdrop-blur mt-auto">
-        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+        <div className="w-full py-4 px-4 sm:px-6 lg:px-8">
           <p className="text-center text-sm text-slate-400">
             © 2026 MRI Super-Resolution Pipeline - Final Year Project
           </p>

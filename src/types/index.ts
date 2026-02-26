@@ -59,6 +59,8 @@ export interface Job {
   updated_at: string
   started_at?: string
   completed_at?: string
+  processing_time_seconds?: number
+  preprocessing_file_count?: number
 }
 
 export interface JobCreate {

@@ -78,6 +78,8 @@ const Jobs = () => {
                   status={job.status}
                   progress={job.progress}
                   error={job.error_message}
+                  processingTimeSeconds={job.processing_time_seconds}
+                  preprocessingFileCount={job.preprocessing_file_count}
                 />
                 {job.status === 'completed' && (
                   <div className="mt-2 flex space-x-2">

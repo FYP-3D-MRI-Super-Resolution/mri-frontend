@@ -5,10 +5,32 @@ interface JobStatusProps {
   status: JobStatusEnum | string
   progress?: number
   error?: string
+  processingTimeSeconds?: number
+  preprocessingFileCount?: number
 }
 
-const JobStatus = ({ jobId, status, progress = 0, error }: JobStatusProps) => {
+const JobStatus = ({
+  jobId,
+  status,
+  progress = 0,
+  error,
+  processingTimeSeconds,
+  preprocessingFileCount,
+}: JobStatusProps) => {
   const statusValue = typeof status === 'string' ? status.toLowerCase() : String(status).toLowerCase()
+
+  const formatDuration = (totalSeconds?: number) => {
+    if (totalSeconds === undefined || totalSeconds === null) return null
+    if (totalSeconds < 0) return null
+    const hours = Math.floor(totalSeconds / 3600)
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+    const seconds = totalSeconds % 60
+    if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`
+    if (minutes > 0) return `${minutes}m ${seconds}s`
+    return `${seconds}s`
+  }
+
+  const duration = statusValue === 'completed' ? formatDuration(processingTimeSeconds) : null
   
   const getStatusColor = () => {
     switch (statusValue) {
@@ -66,6 +88,18 @@ const JobStatus = ({ jobId, status, progress = 0, error }: JobStatusProps) => {
               style={{ width: `${progress}%` }}
             />
           </div>
+        </div>
+      )}
+
+      {(preprocessingFileCount ?? 0) > 0 && (
+        <div className="text-sm text-gray-600 dark:text-gray-300">
+          Files processed: <span className="font-medium">{preprocessingFileCount}</span>
+        </div>
+      )}
+
+      {duration && (
+        <div className="text-sm text-gray-600 dark:text-gray-300">
+          Processing time: <span className="font-medium">{duration}</span>
         </div>
       )}
 

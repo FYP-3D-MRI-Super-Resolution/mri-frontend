@@ -5,7 +5,7 @@
 
 import { apiClient } from '../config'
 import { API_ENDPOINTS } from '@/constants'
-import type { JobsListRequest, JobsRetryResponse, JobsCancelResponse } from '@/types/api.types'
+import type { JobsListRequest, JobsListResponse, JobsRetryResponse, JobsCancelResponse } from '@/types/api.types'
 import type { Job } from '@/types'
 
 /**
@@ -16,8 +16,8 @@ class JobsService {
   /**
    * Get list of jobs with optional filters
    */
-  async getJobs(params?: JobsListRequest): Promise<Job[]> {
-    const response = await apiClient.get<Job[]>(
+  async getJobs(params?: JobsListRequest): Promise<JobsListResponse> {
+    const response = await apiClient.get<JobsListResponse>(
       API_ENDPOINTS.JOBS.LIST,
       { params }
     )

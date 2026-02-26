@@ -33,14 +33,19 @@ export interface AuthMeResponse extends User {}
 export interface JobsListRequest {
   status?: string
   type?: string
+  page?: number
+  size?: number
   limit?: number
   offset?: number
   [key: string]: string | number | undefined
 }
 
 export interface JobsListResponse {
-  jobs: Job[]
+  items: Job[]
   total: number
+  page: number
+  size: number
+  pages: number
 }
 
 export interface JobsGetResponse extends Job {}

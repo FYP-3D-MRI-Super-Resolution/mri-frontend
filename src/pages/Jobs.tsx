@@ -1,15 +1,23 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { jobsService } from '@/api/services'
 import type { Job } from '@/types'
-import JobStatus from '../components/JobStatus'
+import type { JobsListResponse } from '@/types/api.types'
+import JobsTable from '../components/JobsTable'
 
 const Jobs = () => {
-  const { data: jobs, isLoading, error, refetch } = useQuery({
-    queryKey: ['jobs'],
-    queryFn: () => jobsService.getJobs(),
+  const [page, setPage] = useState(1)
+  const [size] = useState(10)
+
+  const { data, isLoading, error, refetch } = useQuery<JobsListResponse>({
+    queryKey: ['jobs', page, size],
+    queryFn: () => jobsService.getJobs({ page, size }),
     refetchInterval: 5000, // Refetch every 5 seconds
   })
+
+  const jobs = data?.items ?? []
+  const totalPages = data?.pages ?? 1
 
   if (isLoading) {
     return (
@@ -56,7 +64,7 @@ const Jobs = () => {
           </button>
         </div>
 
-        {!jobs || jobs.length === 0 ? (
+        {jobs.length === 0 ? (
           <div className="card text-center py-12">
             <div className="text-6xl mb-4">📋</div>
             <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
@@ -71,31 +79,29 @@ const Jobs = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {jobs.map((job: Job) => (
-              <div key={job.id} className="relative">
-                <JobStatus
-                  jobId={job.id}
-                  status={job.status}
-                  progress={job.progress}
-                  error={job.error_message}
-                  processingTimeSeconds={job.processing_time_seconds}
-                  preprocessingFileCount={job.preprocessing_file_count}
-                />
-                {job.status === 'completed' && (
-                  <div className="mt-2 flex space-x-2">
-                    <Link
-                      to={`/viewer/${job.id}`}
-                      className="btn btn-primary text-sm"
-                    >
-                      View Results
-                    </Link>
-                    <button className="btn btn-secondary text-sm">
-                      Download
-                    </button>
-                  </div>
-                )}
+            <JobsTable jobs={jobs as Job[]} />
+
+            <div className="flex items-center justify-between pt-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Page {page} of {totalPages}
+              </p>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                  disabled={page <= 1}
+                  className="btn btn-secondary text-sm disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+                  disabled={page >= totalPages}
+                  className="btn btn-secondary text-sm disabled:opacity-50"
+                >
+                  Next
+                </button>
               </div>
-            ))}
+            </div>
           </div>
         )}
       </div>

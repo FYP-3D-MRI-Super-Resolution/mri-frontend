@@ -5,105 +5,103 @@ const Home = () => {
   const { user } = useAuth()
 
   return (
-    <div className="px-4 py-12">
-      <div className="max-w-4xl mx-auto text-center space-y-8">
-        {/* Hero Section */}
-        <div className="space-y-4">
+    <div className="relative py-4 sm:py-6">
+      <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+        <div className="space-y-8">
           {user && (
-            <p className="text-lg text-primary-600 dark:text-primary-400 font-medium">
-              Welcome back, {user.name}! 👋
+            <p className="text-sm uppercase tracking-[0.2em] text-cyan-300">
+              Welcome back, {user.name}
             </p>
           )}
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white sm:text-5xl">
-            MRI Super-Resolution Pipeline
-          </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
-            Transform low-resolution MRI scans into high-resolution images using
-            deep learning
-          </p>
-        </div>
-
-        {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-          <div className="card text-center">
-            <div className="text-4xl mb-4">📤</div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-              Upload & Preprocess
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Upload raw MRI scans and receive preprocessed HR/LR pairs
+          <div className="space-y-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-white leading-tight">
+              MRI Super-Resolution
+              <span className="text-cyan-300"> Pipeline</span>
+            </h1>
+            <p className="text-lg text-dim max-w-xl">
+              A research-grade workflow to upscale MRI volumes with robust preprocessing,
+              GPU-accelerated inference, and interactive visualization.
             </p>
           </div>
 
-          <div className="card text-center">
-            <div className="text-4xl mb-4">🤖</div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-              Super-Resolution
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Apply trained models to generate high-resolution predictions
-            </p>
+          <div className="flex flex-wrap gap-3">
+            <Link to="/upload" className="btn btn-primary text-base px-6 py-3 inline-flex">
+              Start a New Upload
+            </Link>
+            <Link
+              to="/jobs"
+              className="btn btn-secondary text-base px-6 py-3 inline-flex"
+            >
+              View Jobs
+            </Link>
           </div>
 
-          <div className="card text-center">
-            <div className="text-4xl mb-4">📊</div>
-            <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-              3D Visualization
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Interactive comparison with multi-planar views and volume rendering
-            </p>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              { label: 'Pipeline', value: 'Automated', hint: 'Preprocess + SR' },
+              { label: 'Formats', value: 'NIfTI', hint: '.nii / .nii.gz' },
+              { label: 'Compute', value: 'GPU-Ready', hint: 'Inference optimized' },
+            ].map((stat) => (
+              <div key={stat.label} className="glass rounded-2xl p-4">
+                <p className="text-xs uppercase tracking-widest text-dim">{stat.label}</p>
+                <p className="text-lg font-semibold text-white mt-1">{stat.value}</p>
+                <p className="text-xs text-dim mt-1">{stat.hint}</p>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="mt-12 space-x-4">
-          <Link to="/upload" className="btn btn-primary text-lg px-8 py-3 inline-block">
-            Get Started
-          </Link>
-          <Link
-            to="/jobs"
-            className="btn btn-secondary text-lg px-8 py-3 inline-block"
-          >
-            View Jobs
-          </Link>
-        </div>
+        <div className="space-y-6">
+          <div className="glass rounded-2xl p-6">
+            <h2 className="text-xl font-semibold text-white mb-3">Core Capabilities</h2>
+            <div className="space-y-4">
+              {[
+                {
+                  title: 'Upload + Preprocess',
+                  desc: 'Brain extraction, bias correction, and normalization.',
+                  badge: 'Step 01',
+                },
+                {
+                  title: 'Super-Resolution',
+                  desc: 'Model inference with quality metrics.',
+                  badge: 'Step 02',
+                },
+                {
+                  title: '3D Comparison',
+                  desc: 'Side-by-side viewer for LR vs HR volumes.',
+                  badge: 'Step 03',
+                },
+              ].map((item) => (
+                <div key={item.title} className="flex items-start gap-4">
+                  <div className="px-3 py-1 rounded-full text-xs font-semibold bg-cyan-400/10 text-cyan-200 border border-cyan-400/30">
+                    {item.badge}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-white">{item.title}</p>
+                    <p className="text-sm text-dim">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
-        {/* Info */}
-        <div className="mt-16 card text-left">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
-            How It Works
-          </h2>
-          <ol className="space-y-4 text-gray-700 dark:text-gray-300">
-            <li className="flex">
-              <span className="font-bold text-primary-600 mr-3">1.</span>
-              <div>
-                <strong>Upload Your MRI Scans:</strong> Support for NIfTI format
-                (.nii, .nii.gz)
-              </div>
-            </li>
-            <li className="flex">
-              <span className="font-bold text-primary-600 mr-3">2.</span>
-              <div>
-                <strong>Preprocessing:</strong> Automatic brain extraction, bias
-                correction, and normalization
-              </div>
-            </li>
-            <li className="flex">
-              <span className="font-bold text-primary-600 mr-3">3.</span>
-              <div>
-                <strong>Model Inference:</strong> GPU-accelerated super-resolution
-                processing
-              </div>
-            </li>
-            <li className="flex">
-              <span className="font-bold text-primary-600 mr-3">4.</span>
-              <div>
-                <strong>Visualize & Compare:</strong> Interactive 3D viewer to
-                compare LR vs HR images
-              </div>
-            </li>
-          </ol>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="card">
+              <p className="text-xs uppercase tracking-widest text-dim">Data Privacy</p>
+              <p className="text-lg font-semibold text-white mt-2">Secure by default</p>
+              <p className="text-sm text-dim mt-2">
+                Processed files remain within your workspace and can be deleted
+                automatically after review.
+              </p>
+            </div>
+            <div className="card">
+              <p className="text-xs uppercase tracking-widest text-dim">Monitoring</p>
+              <p className="text-lg font-semibold text-white mt-2">Track every job</p>
+              <p className="text-sm text-dim mt-2">
+                View progress, processing time, and output files per job.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

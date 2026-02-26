@@ -53,7 +53,7 @@ export interface Job {
   error_message?: string
   lr_file_url?: string
   hr_file_url?: string
-  output_files?: string[]
+  output_files?: Array<string | { hr: string; lr: string }>
   metrics?: Record<string, number>
   created_at: string
   updated_at: string

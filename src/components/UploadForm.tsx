@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { preprocessService } from '@/api/services'
 import { useMutation } from '@tanstack/react-query'
-import { uploadFiles } from '../api/client'
+import type { PreprocessUploadResponse } from '@/types/api.types'
 
 interface UploadFormProps {
   onSuccess?: (jobId: string) => void
@@ -11,8 +12,8 @@ const UploadForm = ({ onSuccess }: UploadFormProps) => {
   const [files, setFiles] = useState<File[]>([])
 
   const uploadMutation = useMutation({
-    mutationFn: uploadFiles,
-    onSuccess: (data) => {
+    mutationFn: (files: File[]) => preprocessService.uploadFiles(files),
+    onSuccess: (data: PreprocessUploadResponse) => {
       if (onSuccess) {
         onSuccess(data.job_id)
       }

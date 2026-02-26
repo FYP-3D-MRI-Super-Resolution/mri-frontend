@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { fetchJobs, Job } from '../api/client'
+import { jobsService } from '@/api/services'
+import type { Job } from '@/types'
 import JobStatus from '../components/JobStatus'
 
 const Jobs = () => {
   const { data: jobs, isLoading, error, refetch } = useQuery({
     queryKey: ['jobs'],
-    queryFn: fetchJobs,
+    queryFn: () => jobsService.getJobs(),
     refetchInterval: 5000, // Refetch every 5 seconds
   })
 
@@ -76,7 +77,7 @@ const Jobs = () => {
                   jobId={job.id}
                   status={job.status}
                   progress={job.progress}
-                  error={job.error}
+                  error={job.error_message}
                 />
                 {job.status === 'completed' && (
                   <div className="mt-2 flex space-x-2">

@@ -1,32 +1,40 @@
+import { JobStatus as JobStatusEnum } from '@/types'
+
 interface JobStatusProps {
   jobId: string
-  status: 'pending' | 'processing' | 'completed' | 'failed'
+  status: JobStatusEnum | string
   progress?: number
   error?: string
 }
 
 const JobStatus = ({ jobId, status, progress = 0, error }: JobStatusProps) => {
+  const statusValue = typeof status === 'string' ? status.toLowerCase() : String(status).toLowerCase()
+  
   const getStatusColor = () => {
-    switch (status) {
+    switch (statusValue) {
       case 'completed':
         return 'text-green-600 bg-green-50'
       case 'processing':
         return 'text-blue-600 bg-blue-50'
       case 'failed':
         return 'text-red-600 bg-red-50'
-      default:
+      case 'cancelled':
         return 'text-gray-600 bg-gray-50'
+      default:
+        return 'text-yellow-600 bg-yellow-50'
     }
   }
 
   const getStatusIcon = () => {
-    switch (status) {
+    switch (statusValue) {
       case 'completed':
         return '✓'
       case 'processing':
         return '⟳'
       case 'failed':
         return '✗'
+      case 'cancelled':
+        return '⊘'
       default:
         return '○'
     }
@@ -42,11 +50,11 @@ const JobStatus = ({ jobId, status, progress = 0, error }: JobStatusProps) => {
         <span
           className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor()}`}
         >
-          {getStatusIcon()} {status.toUpperCase()}
+          {getStatusIcon()} {statusValue.toUpperCase()}
         </span>
       </div>
 
-      {status === 'processing' && (
+      {statusValue === 'processing' && (
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Progress</span>

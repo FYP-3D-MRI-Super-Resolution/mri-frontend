@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { fetchJobDetails } from '../api/client'
+import { jobsService } from '@/api/services'
+import type { Job } from '@/types'
 import MRIViewer from '../components/MRIViewer'
 
 type ViewMode = 'side-by-side' | 'overlay' | 'lr-only' | 'hr-only'
@@ -11,9 +12,9 @@ const Viewer = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('side-by-side')
   const [opacity, setOpacity] = useState(0.5)
 
-  const { data: job, isLoading, error } = useQuery({
+  const { data: job, isLoading, error } = useQuery<Job>({
     queryKey: ['job', jobId],
-    queryFn: () => fetchJobDetails(jobId!),
+    queryFn: () => jobsService.getJob(jobId!),
     enabled: !!jobId,
   })
 
@@ -154,7 +155,7 @@ const Viewer = () => {
               Quality Metrics
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {Object.entries(job.metrics).map(([key, value]: [string, number]) => (
+              {Object.entries(job.metrics).map(([key, value]) => (
                 <div key={key} className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded">
                   <p className="text-sm text-gray-600 dark:text-gray-400 uppercase">
                     {key}

@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth, useLogout } from '@/hooks/useAuth'
 
 interface LayoutProps {
   children: ReactNode
@@ -7,12 +8,28 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { isAuthenticated, user } = useAuth()
+  const logoutMutation = useLogout()
 
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/upload', label: 'Upload' },
     { path: '/jobs', label: 'Jobs' },
   ]
+
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        navigate('/login', { replace: true })
+      },
+      onError: (error) => {
+        console.error('Logout failed:', error)
+        // Navigate to login anyway to clear the UI state
+        navigate('/login', { replace: true })
+      },
+    })
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -41,6 +58,41 @@ const Layout = ({ children }: LayoutProps) => {
                   </Link>
                 ))}
               </div>
+            </div>
+            
+            {/* User Menu */}
+            <div className="flex items-center space-x-4">
+              {isAuthenticated ? (
+                <>
+                  {user && (
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      👤 {user.name}
+                    </span>
+                  )}
+                  <button
+                    onClick={handleLogout}
+                    disabled={logoutMutation.isPending}
+                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+                  >
+                    {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-primary-600 hover:text-primary-700 dark:text-primary-400"
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                  >
+                    Sign up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -1,11 +1,19 @@
 import { Link } from 'react-router-dom'
+import { useAuth } from '@/hooks/useAuth'
 
 const Home = () => {
+  const { user } = useAuth()
+
   return (
     <div className="px-4 py-12">
       <div className="max-w-4xl mx-auto text-center space-y-8">
         {/* Hero Section */}
         <div className="space-y-4">
+          {user && (
+            <p className="text-lg text-primary-600 dark:text-primary-400 font-medium">
+              Welcome back, {user.name}! 👋
+            </p>
+          )}
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white sm:text-5xl">
             MRI Super-Resolution Pipeline
           </h1>

@@ -2,12 +2,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useAuth } from '@/hooks/useAuth'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Upload from './pages/Upload'
-import Jobs from './pages/Jobs'
-import Viewer from './pages/Viewer'
+import Home from './pages/user/home/Home'
+import Login from './pages/auth/login/Login'
+import Register from './pages/auth/register/Register'
+import Upload from './pages/user/upload/Upload'
+import Jobs from './pages/user/jobs/Jobs'
+import Viewer from './pages/user/jobs/view/Viewer'
 
 function App() {
   return (

@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import { jobsService } from '@/api/services'
 import type { Job } from '@/types'
 import type { JobsListResponse } from '@/types/api.types'
-import JobsTable from '../components/JobsTable'
-import { JobsTableSkeleton } from '../components/Skeleton'
+import JobsTable from '../../../components/JobsTable'
+import { JobsTableSkeleton } from '../../../components/Skeleton'
 
 const Jobs = () => {
   const [page, setPage] = useState(1)

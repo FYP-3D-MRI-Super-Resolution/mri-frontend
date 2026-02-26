@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { jobsService } from '@/api/services'
 import type { Job } from '@/types'
-import MRIViewer from '../components/MRIViewer'
-import { ViewerSkeleton } from '../components/Skeleton'
+import MRIViewer from '../../../../components/MRIViewer'
+import { ViewerSkeleton } from '../../../../components/Skeleton'
 
 type ViewMode = 'side-by-side' | 'overlay' | 'lr-only' | 'hr-only'
 

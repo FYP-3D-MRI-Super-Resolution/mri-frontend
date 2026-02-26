@@ -66,7 +66,7 @@ const Viewer = () => {
   if (isLoading) {
     return (
       <div className="px-4 py-8">
-        <div className="max-w-7xl mx-auto text-center">
+        <div className="w-full text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading viewer...</p>
         </div>
@@ -77,7 +77,7 @@ const Viewer = () => {
   if (error || !job) {
     return (
       <div className="px-4 py-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full">
           <div className="card bg-red-50 border border-red-200">
             <p className="text-red-700">
               Error loading job: {error instanceof Error ? error.message : 'Not found'}
@@ -90,7 +90,7 @@ const Viewer = () => {
 
   return (
     <div className="px-4 py-8">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="w-full space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">

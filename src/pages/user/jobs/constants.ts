@@ -1,0 +1,2 @@
+export const DEFAULT_PAGE_SIZE = 10
+export const JOBS_REFETCH_INTERVAL = 5000

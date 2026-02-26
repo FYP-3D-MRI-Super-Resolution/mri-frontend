@@ -43,21 +43,6 @@ const Layout = ({ children }: LayoutProps) => {
                   🧠 MRI Super-Resolution
                 </h1>
               </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                      location.pathname === item.path
-                        ? 'border-primary-500 text-gray-900 dark:text-white'
-                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-300'
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
             </div>
             
             {/* User Menu */}
@@ -99,9 +84,40 @@ const Layout = ({ children }: LayoutProps) => {
       </nav>
 
       {/* Main Content - Grows to fill available space */}
-      <main className="flex-1 max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">
-        {children}
-      </main>
+      <div className="flex-1 w-full">
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex gap-6">
+            {/* Sidebar */}
+            <aside className="hidden lg:block w-64 flex-shrink-0 py-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+                <h2 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                  Navigation
+                </h2>
+                <nav className="space-y-1">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                        location.pathname === item.path
+                          ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'
+                          : 'text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+            </aside>
+
+            {/* Page Content */}
+            <main className="flex-1 py-6">
+              {children}
+            </main>
+          </div>
+        </div>
+      </div>
 
       {/* Footer - Always at bottom */}
       <footer className="bg-white dark:bg-gray-800 shadow-lg mt-auto">

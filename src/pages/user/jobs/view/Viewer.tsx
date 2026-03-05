@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useJob } from '@/hooks'
+import type { OutputFileEntry } from '@/types'
 import { ViewerSkeleton } from '../../../../components/Skeleton'
 import ViewerHeader from './components/ViewerHeader'
 import ViewerControls from './components/ViewerControls'
@@ -13,48 +14,40 @@ const Viewer = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('side-by-side')
   const [opacity, setOpacity] = useState(0.5)
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [selectedVariant, setSelectedVariant] = useState<string>('')
 
   const { data: job, isLoading, error } = useJob(jobId!, !!jobId)
 
+  // Derive output files with the new OutputFileEntry shape
+  const outputFiles: OutputFileEntry[] = (job?.output_files ?? []) as OutputFileEntry[]
+  const currentEntry = outputFiles[selectedIndex] ?? {}
+
+  const hrUrl = currentEntry.hr ?? job?.hr_file_url ?? ''
+  const lrVariants = currentEntry.lr_variants ?? {}
+  const lrVariantKeys = Object.keys(lrVariants)
+  const lrVariantKeysStr = lrVariantKeys.join(',')
+
+  // Auto-select first LR variant when variant list changes or on first load
+  useEffect(() => {
+    if (!lrVariantKeysStr) return
+    const keys = lrVariantKeysStr.split(',')
+    if (keys.length > 0 && !selectedVariant) {
+      const preferred = keys.find((k) => k === 'inplane_ds2') ?? keys[0]
+      setSelectedVariant(preferred)
+    }
+  }, [lrVariantKeysStr, selectedVariant])
+
+  // Reset selected file index and choose view mode when job changes
   useEffect(() => {
     setSelectedIndex(0)
-    if (job?.output_files && job.output_files.length > 0) {
-      const firstOutput = job.output_files[0]
-      const isPair =
-        typeof firstOutput === 'object' &&
-        firstOutput !== null &&
-        'hr' in firstOutput &&
-        'lr' in firstOutput
-      setViewMode(isPair ? 'side-by-side' : 'hr-only')
+    const files = (job?.output_files ?? []) as OutputFileEntry[]
+    if (files.length > 0) {
+      const hasLR = Object.keys(files[0]?.lr_variants ?? {}).length > 0
+      setViewMode(hasLR ? 'side-by-side' : 'hr-only')
     }
   }, [job?.id, job?.output_files])
 
-  const normalizeFileUrl = (filePath?: string) => {
-    if (!filePath || !jobId) return ''
-    if (filePath.startsWith('/api/files/')) return filePath
-    const parts = filePath.split(/[/\\]/)
-    return `/api/files/${jobId}/${parts[parts.length - 1]}`
-  }
-
-  const outputFiles = job?.output_files ?? []
-  const hasPairOutputs =
-    outputFiles.length > 0 &&
-    typeof outputFiles[0] === 'object' &&
-    outputFiles[0] !== null &&
-    'hr' in outputFiles[0] &&
-    'lr' in outputFiles[0]
-  const hasStringOutputs = outputFiles.length > 0 && typeof outputFiles[0] === 'string'
-
-  let lrUrl = job?.lr_file_url
-  let hrUrl = job?.hr_file_url
-
-  if (hasPairOutputs) {
-    const pair = outputFiles[selectedIndex] as { hr: string; lr: string }
-    lrUrl = normalizeFileUrl(pair.lr)
-    hrUrl = normalizeFileUrl(pair.hr)
-  } else if (hasStringOutputs) {
-    hrUrl = normalizeFileUrl(outputFiles[selectedIndex] as string)
-  }
+  const lrUrl = lrVariants[selectedVariant] ?? job?.lr_file_url ?? ''
 
   if (isLoading) {
     return (
@@ -85,12 +78,15 @@ const Viewer = () => {
           viewMode={viewMode}
           opacity={opacity}
           selectedIndex={selectedIndex}
+          selectedVariant={selectedVariant}
           lrUrl={lrUrl}
           hrUrl={hrUrl}
           outputFiles={outputFiles}
+          lrVariants={lrVariants}
           onViewModeChange={setViewMode}
           onOpacityChange={setOpacity}
           onFileSelect={setSelectedIndex}
+          onVariantChange={setSelectedVariant}
         />
 
         <ViewerDisplay viewMode={viewMode} lrUrl={lrUrl} hrUrl={hrUrl} />

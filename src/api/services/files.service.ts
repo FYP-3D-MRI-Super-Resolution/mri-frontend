@@ -76,6 +76,16 @@ class FilesService {
     const blob = await this.downloadFileFromUrl(url)
     this.triggerDownload(blob, filename)
   }
+
+  /**
+   * Convenience: download a NIfTI output file (HR or LR variant) by its API URL.
+   * If no filename is provided, it is inferred from the URL path.
+   */
+  async downloadNifti(url: string, filename?: string): Promise<void> {
+    const name = filename ?? url.split('/').pop() ?? 'output.nii.gz'
+    const blob = await this.downloadFileFromUrl(url)
+    this.triggerDownload(blob, name)
+  }
 }
 
 // Export singleton instance

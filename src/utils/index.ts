@@ -6,6 +6,9 @@
 import { JobStatus } from '@/types'
 import { STATUS_COLORS } from '@/constants'
 
+// Cornerstone / DICOM helpers
+export { ensureCornerstoneInitialized, toDicomBase } from './cornerstone'
+
 /**
  * Format file size to human-readable format
  */

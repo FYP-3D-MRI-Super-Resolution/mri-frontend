@@ -14,19 +14,16 @@ const Unavailable = () => (
 )
 
 const ViewerDisplay = ({ viewMode, lrUrl, hrUrl }: ViewerDisplayProps) => (
-  <div className="card">
+  <div>
     {viewMode === 'side-by-side' && lrUrl && hrUrl && (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         <MRIViewer fileUrl={lrUrl} title="Low Resolution" />
         <MRIViewer fileUrl={hrUrl} title="Super Resolution" />
       </div>
     )}
 
     {viewMode === 'overlay' && hrUrl && (
-      <div className="space-y-4">
-        <p className="text-sm text-dim">Overlay visualization (adjust opacity above)</p>
-        <MRIViewer fileUrl={hrUrl} title="Overlay View" />
-      </div>
+      <MRIViewer fileUrl={hrUrl} title="Overlay View" />
     )}
 
     {viewMode === 'lr-only' && lrUrl && <MRIViewer fileUrl={lrUrl} title="Low Resolution" />}

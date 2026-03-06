@@ -346,6 +346,18 @@ export const useMRIViewer = (fileUrl: string): UseMRIViewerReturn => {
     }
   }, [initViewer, toolGroupId])
 
+  // Force Cornerstone to re-measure viewports one frame after layout changes.
+  // When a panel switches from hidden → visible, the ResizeObserver fires but
+  // engine.resize() ensures the GL canvas matches the restored dimensions.
+  useEffect(() => {
+    const engine = engineRef.current
+    if (!engine) return
+    const raf = requestAnimationFrame(() => {
+      try { engine.resize(true) } catch { /* engine may not be ready */ }
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [layout])
+
   const isPlaneVisible = useCallback(
     (plane: 'axial' | 'coronal' | 'sagittal') => layout === 'mpr' || layout === plane,
     [layout],

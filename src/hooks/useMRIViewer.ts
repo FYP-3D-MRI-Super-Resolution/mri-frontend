@@ -358,6 +358,24 @@ export const useMRIViewer = (fileUrl: string): UseMRIViewerReturn => {
     return () => cancelAnimationFrame(raf)
   }, [layout])
 
+  // ResizeObserver: re-measure canvases whenever a viewport element changes size
+  // for ANY reason — fullscreen toggle, window resize, layout switch, etc.
+  // This prevents the brain from stretching when the container aspect-ratio changes.
+  useEffect(() => {
+    const elements = [axialRef.current, coronalRef.current, sagittalRef.current]
+      .filter((el): el is HTMLDivElement => el !== null)
+    if (!elements.length) return
+    let raf = 0
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        try { engineRef.current?.resize(true) } catch { /* engine may not be ready */ }
+      })
+    })
+    elements.forEach(el => ro.observe(el))
+    return () => { ro.disconnect(); cancelAnimationFrame(raf) }
+  }, []) // refs are stable after mount; no deps needed
+
   const isPlaneVisible = useCallback(
     (plane: 'axial' | 'coronal' | 'sagittal') => layout === 'mpr' || layout === plane,
     [layout],

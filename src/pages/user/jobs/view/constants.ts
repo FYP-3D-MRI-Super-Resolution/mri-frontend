@@ -6,3 +6,12 @@ export const VIEW_MODE_BUTTONS = [
   { mode: 'lr-only' as ViewMode, label: 'LR Only', requiresBoth: true },
   { mode: 'hr-only' as ViewMode, label: 'HR Only', requiresBoth: false },
 ] as const
+
+export type Layout = 'mpr' | 'axial' | 'coronal' | 'sagittal'
+
+export const LAYOUT_BUTTONS: { layout: Layout; label: string }[] = [
+  { layout: 'mpr',      label: 'MPR (3-plane)' },
+  { layout: 'axial',    label: 'Axial' },
+  { layout: 'coronal',  label: 'Coronal' },
+  { layout: 'sagittal', label: 'Sagittal' },
+]

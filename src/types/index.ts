@@ -44,6 +44,15 @@ export enum JobStatus {
   CANCELLED = 'cancelled'
 }
 
+/** Degradation variant URLs keyed by suffix, e.g. "thick_3mm" -> "/api/files/..." */
+export type LRVariants = Record<string, string>
+
+/** One subject's preprocessing output: a single HR file + all LR degradation variants */
+export interface OutputFileEntry {
+  hr?: string
+  lr_variants?: LRVariants
+}
+
 export interface Job {
   id: string
   user_id: string
@@ -53,7 +62,7 @@ export interface Job {
   error_message?: string
   lr_file_url?: string
   hr_file_url?: string
-  output_files?: Array<string | { hr: string; lr: string }>
+  output_files?: OutputFileEntry[]
   metrics?: Record<string, number>
   created_at: string
   updated_at: string

@@ -20,3 +20,6 @@ export * from './useFiles'
 
 // UI hooks
 export { useToast } from './useToast'
+
+// MRI viewer hook
+export { useMRIViewer } from './useMRIViewer'

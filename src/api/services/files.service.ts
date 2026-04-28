@@ -76,6 +76,33 @@ class FilesService {
     const blob = await this.downloadFileFromUrl(url)
     this.triggerDownload(blob, filename)
   }
+
+  /**
+   * Convenience: download a NIfTI output file (HR or LR variant) by its API URL.
+   * If no filename is provided, it is inferred from the URL path.
+   */
+  async downloadNifti(url: string, filename?: string): Promise<void> {
+    const name = filename ?? url.split('/').pop() ?? 'output.nii.gz'
+    const blob = await this.downloadFileFromUrl(url)
+    this.triggerDownload(blob, name)
+  }
+
+  /**
+   * Fetch DICOM series metadata for a given DICOM base URL.
+   * Triggers NIfTI → DICOM conversion on the backend and returns slice count.
+   *
+   * `dicomBase` is a browser-relative path like `/api/dicom/...`.
+   * The leading `/api` is stripped before passing to apiClient because
+   * apiClient.baseURL already ends with `/api` — avoids `/api/api/dicom/...`.
+   * We strip the leading `/api` before handing it to `apiClient` because
+   * the client's `baseURL` already includes `/api` — without this the path
+   * becomes `/api/api/dicom/...`.
+   */
+  async getDicomInfo(dicomBase: string): Promise<{ num_slices: number }> {
+    const path = dicomBase.replace(/^\/api/, '')
+    const response = await apiClient.get<{ num_slices: number }>(`${path}/info`)
+    return response.data
+  }
 }
 
 // Export singleton instance

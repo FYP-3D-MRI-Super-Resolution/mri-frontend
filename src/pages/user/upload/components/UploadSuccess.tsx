@@ -1,10 +1,11 @@
 interface UploadSuccessProps {
   jobId: string
+  mode: 'dataset-preprocess' | 'inference-preprocess'
   onViewJobs: () => void
   onUploadMore: () => void
 }
 
-const UploadSuccess = ({ jobId, onViewJobs, onUploadMore }: UploadSuccessProps) => (
+const UploadSuccess = ({ jobId, mode, onViewJobs, onUploadMore }: UploadSuccessProps) => (
   <div className="card space-y-6">
     <div className="flex items-center space-x-3 text-green-400">
       <svg className="h-8 w-8 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,8 +23,9 @@ const UploadSuccess = ({ jobId, onViewJobs, onUploadMore }: UploadSuccessProps) 
     </div>
 
     <p className="text-dim">
-      Your files have been uploaded and preprocessing has started. You can track the
-      progress in the Jobs page.
+      {mode === 'inference-preprocess'
+        ? 'Your low-resolution scan has been uploaded and inference preprocessing has started. You can track progress in the Jobs page.'
+        : 'Your files have been uploaded and preprocessing has started. You can track the progress in the Jobs page.'}
     </p>
 
     <div className="flex flex-wrap gap-3">

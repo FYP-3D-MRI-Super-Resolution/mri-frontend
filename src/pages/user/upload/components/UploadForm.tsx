@@ -1,17 +1,18 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { preprocessService } from '@/api/services'
+import { inferenceService, preprocessService } from '@/api/services'
 import { useMutation } from '@tanstack/react-query'
 import type { PreprocessUploadResponse } from '@/types/api.types'
 
 interface UploadFormProps {
+  mode: 'dataset-preprocess' | 'inference-preprocess'
   onSuccess?: (jobId: string) => void
 }
 
-const UploadForm = ({ onSuccess }: UploadFormProps) => {
+const UploadForm = ({ mode, onSuccess }: UploadFormProps) => {
   const [files, setFiles] = useState<File[]>([])
 
-  const uploadMutation = useMutation({
+  const datasetPreprocessMutation = useMutation({
     mutationFn: (files: File[]) => preprocessService.uploadFiles(files),
     onSuccess: (data: PreprocessUploadResponse) => {
       if (onSuccess) {
@@ -21,6 +22,20 @@ const UploadForm = ({ onSuccess }: UploadFormProps) => {
     },
   })
 
+  const inferencePreprocessMutation = useMutation({
+    mutationFn: (file: File) => inferenceService.uploadLowResForPreprocess(file),
+    onSuccess: (data: PreprocessUploadResponse) => {
+      if (onSuccess) {
+        onSuccess(data.job_id)
+      }
+      setFiles([])
+    },
+  })
+
+  const isMutationPending =
+    datasetPreprocessMutation.isPending || inferencePreprocessMutation.isPending
+  const mutationError = datasetPreprocessMutation.error || inferencePreprocessMutation.error
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const niftiFiles = acceptedFiles.filter(
       (file) =>
@@ -28,8 +43,14 @@ const UploadForm = ({ onSuccess }: UploadFormProps) => {
         file.name.endsWith('.nii.gz') ||
         file.name.endsWith('.gz')
     )
+
+    if (mode === 'inference-preprocess') {
+      setFiles(niftiFiles.slice(0, 1))
+      return
+    }
+
     setFiles((prev) => [...prev, ...niftiFiles])
-  }, [])
+  }, [mode])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -43,7 +64,12 @@ const UploadForm = ({ onSuccess }: UploadFormProps) => {
     e.preventDefault()
     if (files.length === 0) return
 
-    uploadMutation.mutate(files)
+    if (mode === 'inference-preprocess') {
+      inferencePreprocessMutation.mutate(files[0])
+      return
+    }
+
+    datasetPreprocessMutation.mutate(files)
   }
 
   const removeFile = (index: number) => {
@@ -86,7 +112,11 @@ const UploadForm = ({ onSuccess }: UploadFormProps) => {
                   <span className="font-medium text-primary-600">Click to upload</span>{' '}
                   or drag and drop
                 </p>
-                <p className="text-xs">NIfTI files (.nii, .nii.gz)</p>
+                <p className="text-xs">
+                  {mode === 'inference-preprocess'
+                    ? 'One low-resolution NIfTI file (.nii, .nii.gz)'
+                    : 'NIfTI files (.nii, .nii.gz)'}
+                </p>
               </>
             )}
           </div>
@@ -127,19 +157,23 @@ const UploadForm = ({ onSuccess }: UploadFormProps) => {
       )}
 
       {/* Error Message */}
-      {uploadMutation.isError && (
+      {mutationError && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          Error: {uploadMutation.error instanceof Error ? uploadMutation.error.message : 'Upload failed'}
+          Error: {mutationError instanceof Error ? mutationError.message : 'Upload failed'}
         </div>
       )}
 
       {/* Submit Button */}
       <button
         type="submit"
-        disabled={files.length === 0 || uploadMutation.isPending}
+        disabled={files.length === 0 || isMutationPending}
         className="btn btn-primary w-full"
       >
-        {uploadMutation.isPending ? 'Uploading...' : 'Start Preprocessing'}
+        {isMutationPending
+          ? 'Uploading...'
+          : mode === 'inference-preprocess'
+            ? 'Start Inference Preprocessing'
+            : 'Start Preprocessing'}
       </button>
     </form>
   )

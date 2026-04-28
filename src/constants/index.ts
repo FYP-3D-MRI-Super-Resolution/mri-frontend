@@ -39,12 +39,19 @@ export const API_ENDPOINTS = {
   // Inference endpoints
   INFERENCE: {
     RUN: '/infer',
+    PREPROCESS_UPLOAD: '/infer/preprocess-upload',
   },
   
   // Files endpoints
   FILES: {
     LIST: '/files',
     DOWNLOAD: (id: string) => `/files/${id}/download`,
+  },
+
+  // DICOM streaming endpoints (NIfTI → DICOM on-the-fly conversion)
+  DICOM: {
+    INFO: (dicomBase: string) => `${dicomBase}/info`,
+    SLICE: (dicomBase: string, index: number) => `${dicomBase}/slice/${index}`,
   },
 } as const
 

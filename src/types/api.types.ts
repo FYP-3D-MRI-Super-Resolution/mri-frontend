@@ -75,7 +75,7 @@ export interface PreprocessUploadRequest {
 export interface PreprocessUploadResponse {
   job_id: string
   message: string
-  uploaded_files: FileMetadata[]
+  files_uploaded: number
 }
 
 // ==================== Inference API ====================

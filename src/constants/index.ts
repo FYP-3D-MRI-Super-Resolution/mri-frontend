@@ -39,6 +39,7 @@ export const API_ENDPOINTS = {
   // Inference endpoints
   INFERENCE: {
     RUN: '/infer',
+    PREPROCESS_UPLOAD: '/infer/preprocess-upload',
   },
   
   // Files endpoints

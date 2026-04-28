@@ -4,14 +4,42 @@
  */
 
 import { apiClient } from '../config'
+import { fileUploadClient } from '../config'
 import { API_ENDPOINTS } from '@/constants'
 import type { InferenceRunRequest, InferenceRunResponse } from '@/types/api.types'
+import type { PreprocessUploadResponse } from '@/types/api.types'
 
 /**
  * Inference Service Class
  * Handles super-resolution inference operations
  */
 class InferenceService {
+  /**
+   * Upload a low-resolution MRI scan for inference preprocessing.
+   */
+  async uploadLowResForPreprocess(
+    file: File,
+    onUploadProgress?: (progress: number) => void
+  ): Promise<PreprocessUploadResponse> {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const response = await fileUploadClient.post<PreprocessUploadResponse>(
+      API_ENDPOINTS.INFERENCE.PREPROCESS_UPLOAD,
+      formData,
+      {
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            onUploadProgress?.(progress)
+          }
+        },
+      }
+    )
+
+    return response.data
+  }
+
   /**
    * Run inference on preprocessed LR image
    */

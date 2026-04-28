@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { useAuth } from '@/hooks/useAuth'
-import Layout from './components/layout/Layout'
-import ProtectedRoute from './components/ProtectedRoute'
-import Home from './pages/user/home/Home'
-import Login from './pages/auth/login/Login'
-import Register from './pages/auth/register/Register'
-import Upload from './pages/user/upload/Upload'
-import Jobs from './pages/user/jobs/Jobs'
-import Viewer from './pages/user/jobs/view/Viewer'
+import { useAuth } from '@/section/user/hooks/useAuth'
+import Layout from './shared/components/layout/Layout'
+import ProtectedRoute from './shared/components/ProtectedRoute'
+import Home from './section/user/pages/home/Home'
+import Login from './section/auth/login/Login'
+import Register from './section/auth/register/Register'
+import Upload from './section/user/pages/upload/Upload'
+import Jobs from './section/user/pages/jobs/Jobs'
+import Viewer from './section/user/pages/jobs/view/Viewer'
 
 function App() {
   return (

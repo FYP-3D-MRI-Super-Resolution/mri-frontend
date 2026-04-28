@@ -6,8 +6,8 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { STORAGE_KEYS } from '@/constants'
-import type { User } from '@/types'
+import { STORAGE_KEYS } from '@/shared/constants'
+import type { User } from '@/shared/types'
 
 interface AuthState {
   user: User | null

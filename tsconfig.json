@@ -25,12 +25,12 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/api/*": ["./src/api/*"],
-      "@/components/*": ["./src/components/*"],
+      "@/components/*": ["src/shared/components/*"],
       "@/pages/*": ["./src/pages/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/types/*": ["./src/types/*"],
-      "@/utils/*": ["./src/utils/*"],
-      "@/constants/*": ["./src/constants/*"],
+      "@/hooks/*": ["src/section/user/hooks/*"],
+      "@/types/*": ["src/shared/types/*"],
+      "@/utils/*": ["src/shared/utils/*"],
+      "@/constants/*": ["src/shared/constants/*"],
       "@/stores/*": ["./src/stores/*"]
     }
   },

@@ -4,8 +4,8 @@
  */
 
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios'
-import { API_CONFIG, STORAGE_KEYS, ERROR_MESSAGES } from '@/constants'
-import type { APIError } from '@/types'
+import { API_CONFIG, STORAGE_KEYS, ERROR_MESSAGES } from '@/shared/constants'
+import type { APIError } from '@/shared/types'
 
 /**
  * Create axios instance with base configuration

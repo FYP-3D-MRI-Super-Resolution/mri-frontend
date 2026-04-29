@@ -58,6 +58,7 @@ export const API_ENDPOINTS = {
 // ==================== Storage Keys ====================
 export const STORAGE_KEYS = {
   AUTH_TOKEN: 'auth_token',
+  AUTH_STORE: 'auth_store',
   USER: 'user',
   THEME: 'theme',
   LANGUAGE: 'language',
@@ -124,4 +125,10 @@ export const SUCCESS_MESSAGES = {
   UPLOAD_SUCCESS: 'Files uploaded successfully!',
   JOB_CANCELLED: 'Job cancelled successfully!',
   JOB_RETRIED: 'Job restarted successfully!',
+} as const
+
+// ==================== RBAC Constants ====================
+export const USER_ROLES = {
+  USER: 'user',
+  SUPER_ADMIN: 'super_admin',
 } as const

@@ -25,6 +25,7 @@ class AuthService {
     // Store token
     if (response.data.access_token) {
       localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.data.access_token)
+      localStorage.removeItem(STORAGE_KEYS.USER)
     }
     
     return response.data
@@ -42,6 +43,7 @@ class AuthService {
     // Store token
     if (response.data.access_token) {
       localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, response.data.access_token)
+      localStorage.removeItem(STORAGE_KEYS.USER)
     }
     
     return response.data

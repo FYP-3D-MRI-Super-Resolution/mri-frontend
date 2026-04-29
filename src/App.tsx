@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from '@/section/user/hooks/useAuth'
+import { USER_ROLES } from '@/shared/constants'
 import Layout from './shared/components/layout/Layout'
 import ProtectedRoute from './shared/components/ProtectedRoute'
+import RoleProtectedRoute from './shared/components/RoleProtectedRoute'
 import Home from './section/user/pages/home/Home'
 import Login from './section/auth/login/Login'
 import Register from './section/auth/register/Register'
@@ -19,7 +21,20 @@ function App() {
         
         {/* Protected routes with layout */}
         <Route path="/" element={<ProtectedRoute><Layout><Home /></Layout></ProtectedRoute>} />
-        <Route path="/upload" element={<ProtectedRoute><Layout><Upload /></Layout></ProtectedRoute>} />
+        
+        {/* Admin-only routes */}
+        <Route 
+          path="/upload" 
+          element={
+            <ProtectedRoute>
+              <RoleProtectedRoute requiredRole={USER_ROLES.SUPER_ADMIN}>
+                <Layout><Upload /></Layout>
+              </RoleProtectedRoute>
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* User routes */}
         <Route path="/jobs" element={<ProtectedRoute><Layout><Jobs /></Layout></ProtectedRoute>} />
         <Route path="/viewer/:jobId" element={<ProtectedRoute><Layout><Viewer /></Layout></ProtectedRoute>} />
         

@@ -4,8 +4,10 @@
  */
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { authService } from '@/section/user/services'
 import { QUERY_KEYS } from '@/shared/constants'
+import { useAuthStore } from '@/stores/authStore'
 import type { AuthLoginRequest, AuthRegisterRequest } from '@/shared/types/api.types'
 
 /**
@@ -58,12 +60,14 @@ export const useRegister = () => {
  */
 export const useLogout = () => {
   const queryClient = useQueryClient()
+  const clearAuth = useAuthStore((state) => state.clearAuth)
   
   return useMutation({
     mutationFn: () => authService.logout(),
     onSuccess: () => {
       // Clear all queries on logout
       queryClient.clear()
+      clearAuth()
     },
   })
 }
@@ -73,6 +77,20 @@ export const useLogout = () => {
  */
 export const useAuth = () => {
   const { data: user, isLoading, error } = useCurrentUser()
+  const setUser = useAuthStore((state) => state.setUser)
+  const clearAuth = useAuthStore((state) => state.clearAuth)
+
+  useEffect(() => {
+    if (user) {
+      setUser(user)
+    }
+  }, [user, setUser])
+
+  useEffect(() => {
+    if (error) {
+      clearAuth()
+    }
+  }, [error, clearAuth])
   
   return {
     user,

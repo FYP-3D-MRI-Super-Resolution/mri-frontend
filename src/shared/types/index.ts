@@ -4,10 +4,13 @@
  */
 
 // ==================== User Types ====================
+export type UserRole = 'user' | 'super_admin'
+
 export interface User {
   id: string
   email: string
   name: string
+  role: UserRole
   created_at: string
   updated_at: string
 }

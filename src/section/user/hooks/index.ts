@@ -5,6 +5,7 @@
 
 // Auth hooks
 export * from './useAuth'
+export * from './useRole'
 
 // Jobs hooks
 export * from './useJobs'

@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { NAV_ITEMS } from '../constants'
+import { useRole } from '@/section/user/hooks/useRole'
 
 const NAV_ICONS: Record<string, JSX.Element> = {
   '/': (
@@ -26,6 +27,17 @@ interface SidebarProps {
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const location = useLocation()
+  const { isSuperAdmin } = useRole()
+
+  // Filter navigation items based on user role
+  const filteredItems = NAV_ITEMS.filter(item => {
+    // Show upload only to super_admin
+    if (item.path === '/upload') {
+      return isSuperAdmin()
+    }
+    // Show all other items
+    return true
+  })
 
   return (
     <>
@@ -61,7 +73,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
             {/* Nav links */}
             <nav className="p-2">
-              {NAV_ITEMS.map((item) => {
+              {filteredItems.map((item) => {
                 const isActive = location.pathname === item.path
                 return (
                   <Link

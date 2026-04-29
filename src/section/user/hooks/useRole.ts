@@ -30,6 +30,6 @@ export const useRole = () => {
     hasAnyRole: (roles: UserRole[]) => hasAnyRole(roles),
     isSuperAdmin: () => isSuperAdmin(),
     canAccessAdmin: () => isSuperAdmin(),
-    canAccessPreprocess: () => isSuperAdmin(),
+    canAccessPreprocess: () => true,
   }
 }

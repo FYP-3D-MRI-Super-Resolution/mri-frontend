@@ -2,11 +2,11 @@ import { useState } from 'react'
 
 import { useJobs } from '@/section/user/hooks'
 import type { Job } from '@/shared/types'
-import JobsTable from '@/section/user/pages/jobs/components/JobsTable'
+import JobsTable from '@/shared/components/jobs/JobsTable'
 import { JobsTableSkeleton } from '@/shared/components/Skeleton'
-import JobsHeader from '@/section/user/pages/jobs/components/JobsHeader'
-import JobsPagination from '@/section/user/pages/jobs/components/JobsPagination'
-import { DEFAULT_PAGE_SIZE, JOBS_REFETCH_INTERVAL } from '@/section/user/pages/jobs/constants'
+import JobsHeader from '@/shared/components/jobs/JobsHeader'
+import JobsPagination from '@/shared/components/jobs/JobsPagination'
+import { DEFAULT_PAGE_SIZE, JOBS_REFETCH_INTERVAL } from '@/shared/constants/jobs'
 
 const AdminJobs = () => {
   const [page, setPage] = useState(1)

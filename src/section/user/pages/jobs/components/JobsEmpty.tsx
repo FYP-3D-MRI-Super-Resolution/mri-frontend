@@ -5,7 +5,7 @@ const JobsEmpty = () => (
     <div className="text-6xl mb-4">📋</div>
     <h2 className="text-xl font-semibold text-white mb-2">No Jobs Yet</h2>
     <p className="text-dim mb-6">Upload MRI scans to start processing</p>
-    <Link to="/upload" className="btn btn-primary inline-block">
+    <Link to="/app/upload" className="btn btn-primary inline-block">
       Upload Files
     </Link>
   </div>

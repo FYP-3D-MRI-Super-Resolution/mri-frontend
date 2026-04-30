@@ -90,7 +90,7 @@ const JobsTable = ({ jobs }: JobsTableProps) => {
                 <td className="px-4 py-3 text-right">
                   {statusValue === 'completed' ? (
                     <Link
-                      to={`/viewer/${job.id}`}
+                      to={`/app/viewer/${job.id}`}
                       className="btn btn-primary text-sm"
                     >
                       View Results

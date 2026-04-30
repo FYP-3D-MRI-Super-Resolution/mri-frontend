@@ -26,10 +26,10 @@ const HeroSection = () => {
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <Link to="/upload" className="btn btn-primary text-base px-6 py-3 inline-flex">
+        <Link to="/app/upload" className="btn btn-primary text-base px-6 py-3 inline-flex">
           Start a New Upload
         </Link>
-        <Link to="/jobs" className="btn btn-secondary text-base px-6 py-3 inline-flex">
+        <Link to="/app/jobs" className="btn btn-secondary text-base px-6 py-3 inline-flex">
           View Jobs
         </Link>
       </div>

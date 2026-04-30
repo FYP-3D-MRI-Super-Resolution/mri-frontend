@@ -26,7 +26,7 @@ const Upload = () => {
           <UploadSuccess
             jobId={jobId}
             mode={mode}
-            onViewJobs={() => navigate('/jobs')}
+            onViewJobs={() => navigate('/app/jobs')}
             onUploadMore={() => {
               setUploadSuccess(false)
               setJobId(null)

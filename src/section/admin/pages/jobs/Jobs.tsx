@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { useJobs } from '@/section/user/hooks'
+import { useJobs } from '@/section/admin/hooks'
 import type { Job } from '@/shared/types'
 import JobsTable from '@/shared/components/jobs/JobsTable'
 import { JobsTableSkeleton } from '@/shared/components/Skeleton'
@@ -12,7 +12,7 @@ const AdminJobs = () => {
   const [page, setPage] = useState(1)
 
   const { data, isLoading, error, refetch, isFetching } = useJobs(
-    { page, size: DEFAULT_PAGE_SIZE, scope: 'dataset' },
+    { page, size: DEFAULT_PAGE_SIZE },
     { refetchInterval: JOBS_REFETCH_INTERVAL }
   )
 

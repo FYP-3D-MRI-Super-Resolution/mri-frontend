@@ -2,12 +2,24 @@ import { Link, useLocation } from 'react-router-dom'
 
 const ADMIN_NAV_ITEMS = [
   { path: '/admin/dashboard', label: 'Dashboard' },
+  { path: '/admin/dataset-preprocessing', label: 'Dataset Preprocessing' },
+  { path: '/admin/jobs', label: 'Jobs' },
 ] as const
 
 const NAV_ICONS: Record<string, JSX.Element> = {
   '/admin/dashboard': (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+    </svg>
+  ),
+  '/admin/dataset-preprocessing': (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  ),
+  '/admin/jobs': (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   ),
 }

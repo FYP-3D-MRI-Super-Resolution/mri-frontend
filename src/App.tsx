@@ -22,6 +22,8 @@ import Viewer from './section/user/pages/jobs/view/Viewer'
 
 // Admin Pages
 import AdminDashboard from './section/admin/pages/dashboard/Dashboard'
+import DatasetPreprocessing from './section/admin/pages/dataset-preprocessing/DatasetPreprocessing.tsx'
+import AdminJobs from './section/admin/pages/jobs/Jobs'
 
 function App() {
   return (
@@ -83,6 +85,26 @@ function App() {
             <ProtectedRoute>
               <RoleBasedRoute isAdminRoute={true}>
                 <AdminLayout><AdminDashboard /></AdminLayout>
+              </RoleBasedRoute>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/dataset-preprocessing" 
+          element={
+            <ProtectedRoute>
+              <RoleBasedRoute isAdminRoute={true}>
+                <AdminLayout><DatasetPreprocessing /></AdminLayout>
+              </RoleBasedRoute>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/jobs" 
+          element={
+            <ProtectedRoute>
+              <RoleBasedRoute isAdminRoute={true}>
+                <AdminLayout><AdminJobs /></AdminLayout>
               </RoleBasedRoute>
             </ProtectedRoute>
           } 

@@ -1,49 +1,36 @@
 import { Link, useLocation } from 'react-router-dom'
-import { NAV_ITEMS } from '../constants'
-import { useRole } from '@/section/user/hooks/useRole'
+
+const USER_NAV_ITEMS = [
+  { path: '/app/dashboard', label: 'Dashboard' },
+  { path: '/app/upload', label: 'Upload' },
+  { path: '/app/jobs', label: 'Jobs' },
+] as const
 
 const NAV_ICONS: Record<string, JSX.Element> = {
-  '/': (
+  '/app/dashboard': (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
     </svg>
   ),
-  '/upload': (
+  '/app/upload': (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
     </svg>
   ),
-  '/jobs': (
+  '/app/jobs': (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
     </svg>
   ),
-  '/admin/dashboard': (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-    </svg>
-  ),
 }
 
-interface SidebarProps {
+interface UserSidebarProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+const UserSidebar = ({ isOpen, onClose }: UserSidebarProps) => {
   const location = useLocation()
-  const { isSuperAdmin } = useRole()
-
-  // Filter navigation items based on user role
-  const filteredItems = NAV_ITEMS.filter(item => {
-    if (isSuperAdmin()) {
-      // Admin users: show only Home and Admin Dashboard
-      return item.path === '/' || item.path === '/admin/dashboard'
-    } else {
-      // Regular users: show Home, Upload, Jobs (hide Admin Dashboard)
-      return item.path !== '/admin/dashboard'
-    }
-  })
 
   return (
     <>
@@ -65,7 +52,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           <div className="rounded-2xl border border-slate-700/40 bg-slate-900/50 backdrop-blur-sm overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/40">
-              <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Menu</span>
+              <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">User Menu</span>
               <button
                 className="lg:hidden w-6 h-6 flex items-center justify-center rounded-md text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors"
                 onClick={onClose}
@@ -79,7 +66,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
             {/* Nav links */}
             <nav className="p-2">
-              {filteredItems.map((item) => {
+              {USER_NAV_ITEMS.map((item) => {
                 const isActive = location.pathname === item.path
                 return (
                   <Link
@@ -111,4 +98,4 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   )
 }
 
-export default Sidebar
+export default UserSidebar

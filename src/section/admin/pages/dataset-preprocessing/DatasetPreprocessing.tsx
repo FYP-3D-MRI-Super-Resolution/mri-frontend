@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import UploadForm from "@/section/user/pages/upload/components/UploadForm";
-import UploadSuccess from "@/section/user/pages/upload/components/UploadSuccess";
-import UploadGuidelines from "@/section/user/pages/upload/components/UploadGuidelines";
+import UploadForm from "@/shared/components/upload/UploadForm";
+import UploadSuccess from "@/shared/components/upload/UploadSuccess";
+import UploadGuidelines from "@/shared/components/upload/UploadGuidelines";
 
 const DatasetPreprocessing = () => {
   const navigate = useNavigate();

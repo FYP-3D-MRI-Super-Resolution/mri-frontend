@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import UploadForm from './components/UploadForm'
+import UploadForm from '../../../../shared/components/upload/UploadForm'
 import UploadHeader from './components/UploadHeader'
-import UploadSuccess from './components/UploadSuccess'
-import UploadGuidelines from './components/UploadGuidelines'
+import UploadSuccess from '../../../../shared/components/upload/UploadSuccess'
+import UploadGuidelines from '../../../../shared/components/upload/UploadGuidelines'
 
 const Upload = () => {
   const navigate = useNavigate()

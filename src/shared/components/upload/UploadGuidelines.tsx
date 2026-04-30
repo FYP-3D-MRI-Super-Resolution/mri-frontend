@@ -1,4 +1,4 @@
-import { UPLOAD_GUIDELINES } from '../constants'
+import { UPLOAD_GUIDELINES } from '../../../section/user/pages/upload/constants'
 
 const UploadGuidelines = () => (
   <div className="mt-8 card border border-cyan-400/20 bg-cyan-400/5">

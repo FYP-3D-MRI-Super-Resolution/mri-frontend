@@ -42,13 +42,12 @@ const AdminJobs = () => {
   return (
     <div className="px-4 py-8">
       <div className="w-full">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">Dataset Jobs</h1>
-          <p className="mt-2 text-slate-400">
-            View and manage dataset preprocessing jobs created by the admin workflow.
-          </p>
-        </div>
+        <JobsHeader 
+          onRefresh={refetch} 
+          isRefreshing={isFetching}
+          title="Dataset Jobs"
+          description="View and manage dataset preprocessing jobs created by the admin workflow."
+        />
 
         {/* Jobs Section */}
         {jobs.length === 0 ? (
@@ -57,7 +56,6 @@ const AdminJobs = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            <JobsHeader onRefresh={refetch} isRefreshing={isFetching} />
             <JobsTable jobs={jobs as Job[]} resultsBasePath="/admin" />
             <JobsPagination
               page={page}

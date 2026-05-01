@@ -3,6 +3,7 @@ import type { Job } from '@/shared/types'
 
 interface JobsTableProps {
   jobs: Job[]
+  resultsBasePath?: string
 }
 
 const formatDuration = (totalSeconds?: number) => {
@@ -31,7 +32,7 @@ const getStatusStyles = (status: string) => {
   }
 }
 
-const JobsTable = ({ jobs }: JobsTableProps) => {
+const JobsTable = ({ jobs, resultsBasePath = '/app' }: JobsTableProps) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
@@ -90,7 +91,7 @@ const JobsTable = ({ jobs }: JobsTableProps) => {
                 <td className="px-4 py-3 text-right">
                   {statusValue === 'completed' ? (
                     <Link
-                      to={`/app/viewer/${job.id}`}
+                      to={`${resultsBasePath}/viewer/${job.id}`}
                       className="btn btn-primary text-sm"
                     >
                       View Results

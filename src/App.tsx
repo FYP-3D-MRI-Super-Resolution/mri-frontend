@@ -77,6 +77,16 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route 
+          path="/admin/viewer/:jobId" 
+          element={
+            <ProtectedRoute>
+              <RoleBasedRoute isAdminRoute={true}>
+                <AdminLayout><Viewer /></AdminLayout>
+              </RoleBasedRoute>
+            </ProtectedRoute>
+          } 
+        />
         
         {/* Admin Routes - /admin/* */}
         <Route 

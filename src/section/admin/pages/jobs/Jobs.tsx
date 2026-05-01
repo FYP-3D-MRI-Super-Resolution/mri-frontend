@@ -58,7 +58,7 @@ const AdminJobs = () => {
         ) : (
           <div className="space-y-4">
             <JobsHeader onRefresh={refetch} isRefreshing={isFetching} />
-            <JobsTable jobs={jobs as Job[]} />
+            <JobsTable jobs={jobs as Job[]} resultsBasePath="/admin" />
             <JobsPagination
               page={page}
               totalPages={totalPages}

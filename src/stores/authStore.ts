@@ -6,8 +6,8 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { STORAGE_KEYS } from '@/constants'
-import type { User } from '@/types'
+import { STORAGE_KEYS, USER_ROLES } from '@/shared/constants'
+import type { User, UserRole } from '@/shared/types'
 
 interface AuthState {
   user: User | null
@@ -19,6 +19,11 @@ interface AuthState {
   setUser: (user: User) => void
   clearAuth: () => void
   updateUser: (updates: Partial<User>) => void
+  
+  // Role-based helpers
+  hasRole: (role: UserRole) => boolean
+  hasAnyRole: (roles: UserRole[]) => boolean
+  isSuperAdmin: () => boolean
 }
 
 /**
@@ -27,7 +32,7 @@ interface AuthState {
  */
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       token: null,
       isAuthenticated: false,
@@ -49,9 +54,24 @@ export const useAuthStore = create<AuthState>()(
           user: state.user ? { ...state.user, ...updates } : null,
         }))
       },
+      
+      hasRole: (role: UserRole) => {
+        const { user } = get()
+        return user?.role === role
+      },
+      
+      hasAnyRole: (roles: UserRole[]) => {
+        const { user } = get()
+        return user ? roles.includes(user.role) : false
+      },
+      
+      isSuperAdmin: () => {
+        const { user } = get()
+        return user?.role === USER_ROLES.SUPER_ADMIN
+      },
     }),
     {
-      name: STORAGE_KEYS.AUTH_TOKEN,
+      name: STORAGE_KEYS.AUTH_STORE,
       partialize: (state) => ({
         token: state.token,
         user: state.user,

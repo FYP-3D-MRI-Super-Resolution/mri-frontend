@@ -22,13 +22,16 @@ export const API_ENDPOINTS = {
     REFRESH: '/auth/refresh',
   },
   
-  // Jobs endpoints
+  // Jobs endpoints (user-scoped inference jobs)
   JOBS: {
-    LIST: '/jobs',
-    GET: (id: string) => `/jobs/${id}`,
-    RETRY: (id: string) => `/jobs/${id}/retry`,
-    CANCEL: (id: string) => `/jobs/${id}/cancel`,
-    STATUS: (id: string) => `/jobs/${id}/status`,
+    LIST:    '/jobs',
+    GET:     (id: string) => `/jobs/${id}`,
+    DELETE:  (id: string) => `/jobs/${id}`,
+    TRIGGER: (id: string) => `/jobs/${id}/trigger`,
+    // Legacy aliases kept for any remaining callers during migration:
+    STATUS:  (id: string) => `/jobs/${id}`,
+    RETRY:   (id: string) => `/jobs/${id}/trigger`,
+    CANCEL:  (id: string) => `/jobs/${id}`,
   },
   
   // Preprocess endpoints
@@ -44,7 +47,15 @@ export const API_ENDPOINTS = {
 
   // Admin endpoints
   ADMIN: {
+    /** Upload NIfTI files and start dataset preprocessing pipeline */
     DATASET_PREPROCESS_UPLOAD: '/admin/dataset-preprocess/upload',
+    /** Admin-scoped dataset job management */
+    JOBS: {
+      LIST:    '/admin/jobs',
+      GET:     (id: string) => `/admin/jobs/${id}`,
+      DELETE:  (id: string) => `/admin/jobs/${id}`,
+      TRIGGER: (id: string) => `/admin/jobs/${id}/trigger`,
+    },
   },
   
   // Files endpoints

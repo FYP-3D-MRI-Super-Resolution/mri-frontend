@@ -1,21 +1,23 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import UploadForm from "@/shared/components/upload/UploadForm";
 import UploadSuccess from "@/shared/components/upload/UploadSuccess";
 import UploadGuidelines from "@/shared/components/upload/UploadGuidelines";
+import { useUploadDatasetPreprocess } from '@/section/admin/hooks'
 
 const DatasetPreprocessing = () => {
-  const navigate = useNavigate();
-  const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [jobId, setJobId] = useState<string | null>(null);
+  const navigate = useNavigate()
+  const [uploadSuccess, setUploadSuccess] = useState(false)
+  const [jobId, setJobId] = useState<string | null>(null)
+  const uploadMutation = useUploadDatasetPreprocess()
 
-  const mode = "dataset-preprocess" as const;
+  const mode = 'dataset-preprocess' as const
 
   const handleUploadSuccess = (newJobId: string) => {
-    setJobId(newJobId);
-    setUploadSuccess(true);
-  };
+    setJobId(newJobId)
+    setUploadSuccess(true)
+  }
 
   return (
     <div className="px-4 py-8">
@@ -43,7 +45,16 @@ const DatasetPreprocessing = () => {
           />
         ) : (
           <div className="card">
-            <UploadForm mode={mode} onSuccess={handleUploadSuccess} />
+            <UploadForm
+              mode={mode}
+              onSubmit={(files) => {
+                uploadMutation.mutate(files, {
+                  onSuccess: (data) => handleUploadSuccess(data.job_id),
+                })
+              }}
+              isSubmitting={uploadMutation.isPending}
+              error={uploadMutation.error instanceof Error ? uploadMutation.error.message : null}
+            />
           </div>
         )}
 

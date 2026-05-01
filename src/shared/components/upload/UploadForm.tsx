@@ -1,40 +1,15 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { inferenceService, preprocessService } from '@/section/user/services'
-import { useMutation } from '@tanstack/react-query'
-import type { PreprocessUploadResponse } from '@/shared/types/api.types'
 
 interface UploadFormProps {
   mode: 'dataset-preprocess' | 'inference-preprocess'
-  onSuccess?: (jobId: string) => void
+  onSubmit: (files: File[]) => void
+  isSubmitting?: boolean
+  error?: string | null
 }
 
-const UploadForm = ({ mode, onSuccess }: UploadFormProps) => {
+const UploadForm = ({ mode, onSubmit, isSubmitting = false, error }: UploadFormProps) => {
   const [files, setFiles] = useState<File[]>([])
-
-  const datasetPreprocessMutation = useMutation({
-    mutationFn: (files: File[]) => preprocessService.uploadFiles(files),
-    onSuccess: (data: PreprocessUploadResponse) => {
-      if (onSuccess) {
-        onSuccess(data.job_id)
-      }
-      setFiles([])
-    },
-  })
-
-  const inferencePreprocessMutation = useMutation({
-    mutationFn: (file: File) => inferenceService.uploadLowResForPreprocess(file),
-    onSuccess: (data: PreprocessUploadResponse) => {
-      if (onSuccess) {
-        onSuccess(data.job_id)
-      }
-      setFiles([])
-    },
-  })
-
-  const isMutationPending =
-    datasetPreprocessMutation.isPending || inferencePreprocessMutation.isPending
-  const mutationError = datasetPreprocessMutation.error || inferencePreprocessMutation.error
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const niftiFiles = acceptedFiles.filter(
@@ -64,12 +39,7 @@ const UploadForm = ({ mode, onSuccess }: UploadFormProps) => {
     e.preventDefault()
     if (files.length === 0) return
 
-    if (mode === 'inference-preprocess') {
-      inferencePreprocessMutation.mutate(files[0])
-      return
-    }
-
-    datasetPreprocessMutation.mutate(files)
+    onSubmit(files)
   }
 
   const removeFile = (index: number) => {
@@ -157,19 +127,19 @@ const UploadForm = ({ mode, onSuccess }: UploadFormProps) => {
       )}
 
       {/* Error Message */}
-      {mutationError && (
+      {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          Error: {mutationError instanceof Error ? mutationError.message : 'Upload failed'}
+          Error: {error}
         </div>
       )}
 
       {/* Submit Button */}
       <button
         type="submit"
-        disabled={files.length === 0 || isMutationPending}
+        disabled={files.length === 0 || isSubmitting}
         className="btn btn-primary w-full"
       >
-        {isMutationPending
+        {isSubmitting
           ? 'Uploading...'
           : mode === 'inference-preprocess'
             ? 'Start Inference Preprocessing'

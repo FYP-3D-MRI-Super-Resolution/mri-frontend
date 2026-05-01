@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useUploadLowResForInferencePreprocess } from '@/section/user/hooks'
 
 import UploadForm from '../../../../shared/components/upload/UploadForm'
 import UploadHeader from './components/UploadHeader'
@@ -11,6 +12,7 @@ const Upload = () => {
   const [uploadSuccess, setUploadSuccess] = useState(false)
   const [jobId, setJobId] = useState<string | null>(null)
   const mode = 'inference-preprocess' as const
+  const uploadMutation = useUploadLowResForInferencePreprocess()
 
   const handleUploadSuccess = (newJobId: string) => {
     setJobId(newJobId)
@@ -34,7 +36,16 @@ const Upload = () => {
           />
         ) : (
           <div className="card">
-            <UploadForm mode={mode} onSuccess={handleUploadSuccess} />
+            <UploadForm
+              mode={mode}
+              onSubmit={(files) => {
+                uploadMutation.mutate(files[0], {
+                  onSuccess: (data) => handleUploadSuccess(data.job_id),
+                })
+              }}
+              isSubmitting={uploadMutation.isPending}
+              error={uploadMutation.error instanceof Error ? uploadMutation.error.message : null}
+            />
           </div>
         )}
 

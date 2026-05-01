@@ -41,6 +41,11 @@ export const API_ENDPOINTS = {
     RUN: '/infer',
     PREPROCESS_UPLOAD: '/infer/preprocess-upload',
   },
+
+  // Admin endpoints
+  ADMIN: {
+    DATASET_PREPROCESS_UPLOAD: '/admin/dataset-preprocess/upload',
+  },
   
   // Files endpoints
   FILES: {

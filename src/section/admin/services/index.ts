@@ -4,3 +4,4 @@
  */
 
 export { adminJobsService } from './jobs.service'
+export { adminUploadService } from './upload.service'

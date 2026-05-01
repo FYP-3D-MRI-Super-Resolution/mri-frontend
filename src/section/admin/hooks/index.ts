@@ -4,3 +4,4 @@
  */
 
 export * from './useJobs'
+export * from './useUpload'

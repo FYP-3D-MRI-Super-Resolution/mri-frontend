@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { useAuth } from '@/section/user/hooks/useAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
 import { HERO_STATS } from '../constants'
 
 const HeroSection = () => {

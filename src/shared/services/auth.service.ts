@@ -3,7 +3,7 @@
  * Single Responsibility: Handle all authentication-related API calls
  */
 
-import { apiClient } from '../../../api/config'
+import { apiClient } from '@/api/config'
 import { API_ENDPOINTS, STORAGE_KEYS } from '@/shared/constants'
 import type { AuthLoginRequest, AuthLoginResponse, AuthRegisterRequest, AuthRegisterResponse } from '@/shared/types/api.types'
 import type { User } from '@/shared/types'

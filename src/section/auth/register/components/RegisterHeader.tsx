@@ -10,7 +10,7 @@ const RegisterHeader = () => (
     </h2>
     <p className="mt-2 text-center text-sm text-dim">
       Or{' '}
-      <Link to="/login" className="font-medium text-cyan-300 hover:text-cyan-200">
+      <Link to="/auth/login" className="font-medium text-cyan-300 hover:text-cyan-200">
         sign in to existing account
       </Link>
     </p>

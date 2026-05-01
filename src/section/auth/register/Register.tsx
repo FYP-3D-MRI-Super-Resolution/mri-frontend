@@ -1,7 +1,7 @@
 import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useRegister } from '@/section/user/hooks/useAuth'
+import { useRegister } from '@/shared/hooks/useAuth'
 import { parseErrorMessage } from '@/shared/utils'
 import RegisterHeader from './components/RegisterHeader'
 import RegisterForm from './components/RegisterForm'

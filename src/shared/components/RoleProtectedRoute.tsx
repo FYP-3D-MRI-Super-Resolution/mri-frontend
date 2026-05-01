@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '@/section/user/hooks/useAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
 import { USER_ROLES } from '@/shared/constants'
 import type { UserRole } from '@/shared/types'
 

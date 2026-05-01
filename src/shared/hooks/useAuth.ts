@@ -5,7 +5,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { authService } from '@/section/user/services'
+import { authService } from '@/shared/services/auth.service'
 import { QUERY_KEYS } from '@/shared/constants'
 import { useAuthStore } from '@/stores/authStore'
 import type { AuthLoginRequest, AuthRegisterRequest } from '@/shared/types/api.types'

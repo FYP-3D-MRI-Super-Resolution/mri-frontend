@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { NAV_ITEMS } from '../constants'
-import { useRole } from '@/section/user/hooks/useRole'
+import { useRole } from '@/shared/hooks/useRole'
 
 const NAV_ICONS: Record<string, JSX.Element> = {
   '/': (

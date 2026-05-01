@@ -1,4 +1,4 @@
-import { useAuth } from '@/section/user/hooks/useAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
 
 const AdminDashboard = () => {
   const { user } = useAuth()

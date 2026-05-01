@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { useAuth } from '@/section/user/hooks/useAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
 import { USER_ROLES } from '@/shared/constants'
 
 // Layouts

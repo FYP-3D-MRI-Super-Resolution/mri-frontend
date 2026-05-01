@@ -3,7 +3,7 @@
  * Single Responsibility: Handle all authentication-related API calls
  */
 
-import { apiClient } from '../../../api/config'
+import { apiClient } from '@/api/config'
 import { API_ENDPOINTS, STORAGE_KEYS } from '@/shared/constants'
 import type { AuthLoginRequest, AuthLoginResponse, AuthRegisterRequest, AuthRegisterResponse } from '@/shared/types/api.types'
 import type { User } from '@/shared/types'
@@ -53,13 +53,9 @@ class AuthService {
    * Logout user
    */
   async logout(): Promise<void> {
-    try {
-      await apiClient.post(API_ENDPOINTS.AUTH.LOGOUT)
-    } finally {
-      // Always clear local storage even if API call fails
-      localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN)
-      localStorage.removeItem(STORAGE_KEYS.USER)
-    }
+    // Stateless JWT: simply clear local storage
+    localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN)
+    localStorage.removeItem(STORAGE_KEYS.USER)
   }
 
   /**

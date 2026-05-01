@@ -3,7 +3,6 @@
  * Central export for all services (Facade Pattern)
  */
 
-export { authService } from './auth.service'
 export { jobsService } from './jobs.service'
 export { preprocessService } from './preprocess.service'
 export { inferenceService } from './inference.service'

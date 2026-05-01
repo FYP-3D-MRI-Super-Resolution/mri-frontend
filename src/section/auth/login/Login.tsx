@@ -1,7 +1,7 @@
 import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useLogin } from '@/section/user/hooks/useAuth'
+import { useLogin } from '@/shared/hooks/useAuth'
 import { parseErrorMessage } from '@/shared/utils'
 import LoginHeader from './components/LoginHeader'
 import LoginForm from './components/LoginForm'

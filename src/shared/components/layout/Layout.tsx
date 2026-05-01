@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useAuth, useLogout } from '@/section/user/hooks/useAuth'
+import { useAuth, useLogout } from '@/shared/hooks/useAuth'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import AppFooter from './components/AppFooter'

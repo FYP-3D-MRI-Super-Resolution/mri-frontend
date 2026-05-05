@@ -93,6 +93,14 @@ export const QUERY_KEYS = {
   FILES: {
     LIST: (jobId?: string) => ['files', 'list', jobId] as const,
   },
+  ADMIN: {
+    DASHBOARD: ['admin', 'dashboard'] as const,
+    STATS: ['admin', 'stats'] as const,
+    METRICS: ['admin', 'metrics'] as const,
+    JOBS_COUNT: ['admin', 'jobs', 'count'] as const,
+    USERS_COUNT: ['admin', 'users', 'count'] as const,
+    HEALTH: ['admin', 'health'] as const,
+  },
 } as const
 
 // ==================== Job Configuration ====================

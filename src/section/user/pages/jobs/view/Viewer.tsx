@@ -18,11 +18,19 @@ const Viewer = () => {
 
   const { data: job, isLoading, error } = useJob(jobId!, !!jobId)
 
+  // Follow chained inference job if this is a preprocessing job
+  const chainedJobId = job?.metrics?.chained_inference_job_id as string | undefined
+  const { data: inferenceJob } = useJob(chainedJobId!, !!chainedJobId)
+
+  // Use the inference job if it's completed, otherwise fall back to the base job
+  // This satisfies the requirement to show SOUP-GAN output instead of preprocessing output
+  const displayJob = (inferenceJob && inferenceJob.status === 'completed') ? inferenceJob : job
+
   // Derive output files with the new OutputFileEntry shape
-  const outputFiles: OutputFileEntry[] = (job?.output_files ?? []) as OutputFileEntry[]
+  const outputFiles: OutputFileEntry[] = (displayJob?.output_files ?? []) as OutputFileEntry[]
   const currentEntry = outputFiles[selectedIndex] ?? {}
 
-  const hrUrl = currentEntry.hr ?? job?.hr_file_url ?? ''
+  const hrUrl = currentEntry.hr ?? displayJob?.hr_file_url ?? ''
   const lrVariants = currentEntry.lr_variants ?? {}
   const lrVariantKeys = Object.keys(lrVariants)
   const lrVariantKeysStr = lrVariantKeys.join(',')
@@ -40,14 +48,14 @@ const Viewer = () => {
   // Reset selected file index and choose view mode when job changes
   useEffect(() => {
     setSelectedIndex(0)
-    const files = (job?.output_files ?? []) as OutputFileEntry[]
+    const files = (displayJob?.output_files ?? []) as OutputFileEntry[]
     if (files.length > 0) {
       const hasLR = Object.keys(files[0]?.lr_variants ?? {}).length > 0
       setViewMode(hasLR ? 'side-by-side' : 'hr-only')
     }
-  }, [job?.id, job?.output_files])
+  }, [displayJob?.id, displayJob?.output_files])
 
-  const lrUrl = lrVariants[selectedVariant] ?? job?.lr_file_url ?? ''
+  const lrUrl = lrVariants[selectedVariant] ?? displayJob?.lr_file_url ?? job?.lr_file_url ?? ''
 
   if (isLoading) {
     return (
@@ -91,7 +99,7 @@ const Viewer = () => {
 
         <ViewerDisplay viewMode={viewMode} lrUrl={lrUrl} hrUrl={hrUrl} />
 
-        {job.metrics && <ViewerMetrics metrics={job.metrics} />}
+        {displayJob.metrics && <ViewerMetrics metrics={displayJob.metrics} />}
       </div>
     </div>
   )

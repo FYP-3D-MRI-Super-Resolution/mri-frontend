@@ -1,4 +1,6 @@
-export type ViewMode = 'side-by-side' | 'overlay' | 'lr-only' | 'hr-only'
+export type ViewMode = 'single' | 'side-by-side' | 'overlay' | 'lr-only' | 'hr-only'
+
+export type ViewerVariant = 'user' | 'admin'
 
 export const VIEW_MODE_BUTTONS = [
   { mode: 'side-by-side' as ViewMode, label: 'Side by Side', requiresBoth: true },

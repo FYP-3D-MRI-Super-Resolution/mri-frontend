@@ -72,7 +72,7 @@ function App() {
           element={
             <ProtectedRoute>
               <RoleBasedRoute isAdminRoute={false}>
-                <UserLayout><Viewer /></UserLayout>
+                <UserLayout><Viewer variant="user" /></UserLayout>
               </RoleBasedRoute>
             </ProtectedRoute>
           } 
@@ -82,7 +82,7 @@ function App() {
           element={
             <ProtectedRoute>
               <RoleBasedRoute isAdminRoute={true}>
-                <AdminLayout><Viewer /></AdminLayout>
+                <AdminLayout><Viewer variant="admin" /></AdminLayout>
               </RoleBasedRoute>
             </ProtectedRoute>
           } 

@@ -16,12 +16,12 @@ const HeroSection = () => {
 
       <div className="space-y-4">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-white leading-tight">
-          MRI Super-Resolution
-          <span className="text-cyan-300"> Pipeline</span>
+          MRI Inference
+          <span className="text-cyan-300"> Preprocessing</span>
         </h1>
         <p className="text-lg text-dim max-w-xl">
-          A research-grade workflow to upscale MRI volumes with robust preprocessing,
-          GPU-accelerated inference, and interactive visualization.
+          Upload low-resolution MRI scans, run inference-ready preprocessing, and
+          inspect normalized volumes in an interactive 3D viewer.
         </p>
       </div>
 

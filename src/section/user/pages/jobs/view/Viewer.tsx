@@ -7,18 +7,22 @@ import ViewerHeader from './components/ViewerHeader'
 import ViewerControls from './components/ViewerControls'
 import ViewerDisplay from './components/ViewerDisplay'
 import ViewerMetrics from './components/ViewerMetrics'
-import type { ViewMode } from './constants'
+import type { ViewMode, ViewerVariant } from './constants'
 
-const Viewer = () => {
+interface ViewerProps {
+  variant?: ViewerVariant
+}
+
+const Viewer = ({ variant = 'user' }: ViewerProps) => {
   const { jobId } = useParams<{ jobId: string }>()
-  const [viewMode, setViewMode] = useState<ViewMode>('side-by-side')
+  const isComparisonMode = variant === 'admin'
+  const [viewMode, setViewMode] = useState<ViewMode>(isComparisonMode ? 'side-by-side' : 'single')
   const [opacity, setOpacity] = useState(0.5)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [selectedVariant, setSelectedVariant] = useState<string>('')
 
   const { data: job, isLoading, error } = useJob(jobId!, !!jobId)
 
-  // Derive output files with the new OutputFileEntry shape
   const outputFiles: OutputFileEntry[] = (job?.output_files ?? []) as OutputFileEntry[]
   const currentEntry = outputFiles[selectedIndex] ?? {}
 
@@ -27,32 +31,36 @@ const Viewer = () => {
   const lrVariantKeys = Object.keys(lrVariants)
   const lrVariantKeysStr = lrVariantKeys.join(',')
 
-  // Auto-select first LR variant when variant list changes or on first load
   useEffect(() => {
-    if (!lrVariantKeysStr) return
+    if (!isComparisonMode || !lrVariantKeysStr) return
     const keys = lrVariantKeysStr.split(',')
     if (keys.length > 0 && !selectedVariant) {
       const preferred = keys.find((k) => k === 'inplane_ds2') ?? keys[0]
       setSelectedVariant(preferred)
     }
-  }, [lrVariantKeysStr, selectedVariant])
+  }, [isComparisonMode, lrVariantKeysStr, selectedVariant])
 
-  // Reset selected file index and choose view mode when job changes
   useEffect(() => {
     setSelectedIndex(0)
+    if (!isComparisonMode) {
+      setViewMode('single')
+      return
+    }
+
     const files = (job?.output_files ?? []) as OutputFileEntry[]
     if (files.length > 0) {
       const hasLR = Object.keys(files[0]?.lr_variants ?? {}).length > 0
       setViewMode(hasLR ? 'side-by-side' : 'hr-only')
     }
-  }, [job?.id, job?.output_files])
+  }, [job?.id, job?.output_files, isComparisonMode])
 
   const lrUrl = lrVariants[selectedVariant] ?? job?.lr_file_url ?? ''
+  const volumeUrl = hrUrl
 
   if (isLoading) {
     return (
       <div className="px-4 py-8">
-        <ViewerSkeleton />
+        <ViewerSkeleton variant={variant} />
       </div>
     )
   }
@@ -72,15 +80,17 @@ const Viewer = () => {
   return (
     <div className="px-4 py-8">
       <div className="w-full space-y-6">
-        <ViewerHeader jobId={jobId!} />
+        <ViewerHeader jobId={jobId!} variant={variant} />
 
         <ViewerControls
+          variant={variant}
           viewMode={viewMode}
           opacity={opacity}
           selectedIndex={selectedIndex}
           selectedVariant={selectedVariant}
           lrUrl={lrUrl}
           hrUrl={hrUrl}
+          volumeUrl={volumeUrl}
           outputFiles={outputFiles}
           lrVariants={lrVariants}
           onViewModeChange={setViewMode}
@@ -89,7 +99,13 @@ const Viewer = () => {
           onVariantChange={setSelectedVariant}
         />
 
-        <ViewerDisplay viewMode={viewMode} lrUrl={lrUrl} hrUrl={hrUrl} />
+        <ViewerDisplay
+          variant={variant}
+          viewMode={viewMode}
+          lrUrl={lrUrl}
+          hrUrl={hrUrl}
+          volumeUrl={volumeUrl}
+        />
 
         {job.metrics && <ViewerMetrics metrics={job.metrics} />}
       </div>

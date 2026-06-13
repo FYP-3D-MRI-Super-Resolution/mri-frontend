@@ -1,15 +1,17 @@
-import type { ViewMode } from '../constants'
+import type { ViewMode, ViewerVariant } from '../constants'
 import { VIEW_MODE_BUTTONS } from '../constants'
 import type { LRVariants, OutputFileEntry } from '@/shared/types'
 import { filesService } from '@/section/user/services/files.service'
 
 interface ViewerControlsProps {
   viewMode: ViewMode
+  variant?: ViewerVariant
   opacity: number
   selectedIndex: number
   selectedVariant: string
   lrUrl?: string
   hrUrl?: string
+  volumeUrl?: string
   outputFiles: OutputFileEntry[]
   lrVariants: LRVariants
   onViewModeChange: (mode: ViewMode) => void
@@ -20,11 +22,13 @@ interface ViewerControlsProps {
 
 const ViewerControls = ({
   viewMode,
+  variant = 'user',
   opacity,
   selectedIndex,
   selectedVariant,
   lrUrl,
   hrUrl,
+  volumeUrl,
   outputFiles,
   lrVariants,
   onViewModeChange,
@@ -33,6 +37,7 @@ const ViewerControls = ({
   onVariantChange,
 }: ViewerControlsProps) => {
   const lrVariantKeys = Object.keys(lrVariants)
+  const isComparisonMode = variant === 'admin'
 
   const handleDownloadHR = () => {
     if (hrUrl) filesService.downloadNifti(hrUrl)
@@ -40,6 +45,52 @@ const ViewerControls = ({
 
   const handleDownloadLR = () => {
     if (lrUrl) filesService.downloadNifti(lrUrl)
+  }
+
+  const handleDownloadVolume = () => {
+    if (volumeUrl) filesService.downloadNifti(volumeUrl)
+  }
+
+  if (!isComparisonMode) {
+    return (
+      <div className="card space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <p className="text-sm text-dim">
+            Viewing the preprocessed scan prepared for downstream inference.
+          </p>
+          {volumeUrl && (
+            <button
+              onClick={handleDownloadVolume}
+              className="btn btn-secondary text-sm flex items-center gap-1"
+              title="Download preprocessed NIfTI file"
+            >
+              ↓ Download Preprocessed NIfTI
+            </button>
+          )}
+        </div>
+
+        {outputFiles.length > 1 && (
+          <div className="flex items-center space-x-3">
+            <label className="text-sm text-dim">Subject:</label>
+            <select
+              value={selectedIndex}
+              onChange={(e) => onFileSelect(Number(e.target.value))}
+              className="rounded-lg border border-slate-600 bg-slate-800 text-white text-sm px-3 py-1 focus:outline-none focus:border-cyan-400"
+            >
+              {outputFiles.map((file, index) => {
+                const parts = (file.hr ?? '').split('/')
+                const label = parts[parts.length - 1] || `Subject ${index + 1}`
+                return (
+                  <option key={index} value={index}>
+                    {label}
+                  </option>
+                )
+              })}
+            </select>
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (

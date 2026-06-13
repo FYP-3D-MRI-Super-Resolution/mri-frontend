@@ -4,6 +4,7 @@ import type { Job } from '@/shared/types'
 interface JobsTableProps {
   jobs: Job[]
   resultsBasePath?: string
+  viewActionLabel?: string
 }
 
 const formatDuration = (totalSeconds?: number) => {
@@ -32,7 +33,11 @@ const getStatusStyles = (status: string) => {
   }
 }
 
-const JobsTable = ({ jobs, resultsBasePath = '/app' }: JobsTableProps) => {
+const JobsTable = ({
+  jobs,
+  resultsBasePath = '/app',
+  viewActionLabel = 'View Results',
+}: JobsTableProps) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
@@ -94,7 +99,7 @@ const JobsTable = ({ jobs, resultsBasePath = '/app' }: JobsTableProps) => {
                       to={`${resultsBasePath}/viewer/${job.id}`}
                       className="btn btn-primary text-sm"
                     >
-                      View Results
+                      {viewActionLabel}
                     </Link>
                   ) : (
                     <span className="text-xs text-gray-500 dark:text-gray-400">Not ready</span>

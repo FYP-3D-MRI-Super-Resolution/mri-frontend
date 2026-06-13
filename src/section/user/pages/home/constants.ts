@@ -1,23 +1,23 @@
 export const HERO_STATS = [
-  { label: 'Pipeline', value: 'Automated', hint: 'Preprocess + SR' },
+  { label: 'Pipeline', value: 'Automated', hint: 'Inference preprocessing' },
   { label: 'Formats', value: 'NIfTI', hint: '.nii / .nii.gz' },
-  { label: 'Compute', value: 'GPU-Ready', hint: 'Inference optimized' },
+  { label: 'Output', value: 'MNI-ready', hint: 'Normalized & registered' },
 ] as const
 
 export const PIPELINE_STEPS = [
   {
-    title: 'Upload + Preprocess',
-    desc: 'Brain extraction, bias correction, and normalization.',
+    title: 'Upload LR Scan',
+    desc: 'Submit a low-resolution NIfTI volume for processing.',
     badge: 'Step 01',
   },
   {
-    title: 'Super-Resolution',
-    desc: 'Model inference with quality metrics.',
+    title: 'Inference Preprocessing',
+    desc: 'Brain extraction, bias correction, normalization, and MNI registration.',
     badge: 'Step 02',
   },
   {
-    title: '3D Comparison',
-    desc: 'Side-by-side viewer for LR vs HR volumes.',
+    title: '3D Inspection',
+    desc: 'Review the preprocessed volume in an interactive viewer.',
     badge: 'Step 03',
   },
 ] as const

@@ -60,7 +60,7 @@ export const JobsTableSkeleton = () => (
   </SkeletonThemeWrapper>
 )
 
-export const ViewerSkeleton = () => (
+export const ViewerSkeleton = ({ variant = 'user' }: { variant?: 'user' | 'admin' }) => (
   <SkeletonThemeWrapper>
     <div className="w-full space-y-6">
       {/* Header */}
@@ -71,21 +71,28 @@ export const ViewerSkeleton = () => (
 
       {/* Controls card */}
       <div className="card flex flex-wrap gap-3 items-center">
-        {[90, 72, 80, 90].map((w, i) => (
+        {(variant === 'admin' ? [90, 72, 80, 90] : [220]).map((w, i) => (
           <ReactSkeleton key={i} width={w} height={36} borderRadius={8} />
         ))}
       </div>
 
-      {/* Main viewer — two panels */}
+      {/* Main viewer */}
       <div className="card">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {['Low Resolution', 'Super Resolution'].map((_, i) => (
-            <div key={i} className="space-y-2">
-              <ReactSkeleton width={128} height={20} borderRadius={6} />
-              <ReactSkeleton height={288} borderRadius={12} />
-            </div>
-          ))}
-        </div>
+        {variant === 'admin' ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {['Low Resolution', 'High Resolution'].map((_, i) => (
+              <div key={i} className="space-y-2">
+                <ReactSkeleton width={128} height={20} borderRadius={6} />
+                <ReactSkeleton height={288} borderRadius={12} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <ReactSkeleton width={160} height={20} borderRadius={6} />
+            <ReactSkeleton height={288} borderRadius={12} />
+          </div>
+        )}
       </div>
 
       {/* Metrics card */}

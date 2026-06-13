@@ -56,7 +56,11 @@ const AdminJobs = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            <JobsTable jobs={jobs as Job[]} resultsBasePath="/admin" />
+            <JobsTable
+              jobs={jobs as Job[]}
+              resultsBasePath="/admin"
+              viewActionLabel="View Comparison"
+            />
             <JobsPagination
               page={page}
               totalPages={totalPages}

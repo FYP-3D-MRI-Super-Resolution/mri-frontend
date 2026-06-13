@@ -43,13 +43,18 @@ const Jobs = () => {
   return (
     <div className="px-4 py-8">
       <div className="w-full">
-        <JobsHeader onRefresh={refetch} isRefreshing={isFetching} />
+        <JobsHeader
+          onRefresh={refetch}
+          isRefreshing={isFetching}
+          title="Preprocessing Jobs"
+          description="Track inference preprocessing jobs for your uploaded scans."
+        />
 
         {jobs.length === 0 ? (
           <JobsEmpty />
         ) : (
           <div className="space-y-4">
-            <JobsTable jobs={jobs as Job[]} />
+            <JobsTable jobs={jobs as Job[]} viewActionLabel="View Scan" />
             <JobsPagination
               page={page}
               totalPages={totalPages}

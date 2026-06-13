@@ -39,16 +39,31 @@ const ViewerControls = ({
   const lrVariantKeys = Object.keys(lrVariants)
   const isComparisonMode = variant === 'admin'
 
-  const handleDownloadHR = () => {
-    if (hrUrl) filesService.downloadNifti(hrUrl)
+  const handleDownloadHR = async () => {
+    if (!hrUrl) return
+    try {
+      await filesService.downloadNifti(hrUrl)
+    } catch {
+      window.alert('Download failed. Please try again.')
+    }
   }
 
-  const handleDownloadLR = () => {
-    if (lrUrl) filesService.downloadNifti(lrUrl)
+  const handleDownloadLR = async () => {
+    if (!lrUrl) return
+    try {
+      await filesService.downloadNifti(lrUrl)
+    } catch {
+      window.alert('Download failed. Please try again.')
+    }
   }
 
-  const handleDownloadVolume = () => {
-    if (volumeUrl) filesService.downloadNifti(volumeUrl)
+  const handleDownloadVolume = async () => {
+    if (!volumeUrl) return
+    try {
+      await filesService.downloadNifti(volumeUrl)
+    } catch {
+      window.alert('Download failed. Please try again or check that the job finished successfully.')
+    }
   }
 
   if (!isComparisonMode) {

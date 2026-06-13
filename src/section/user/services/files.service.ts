@@ -14,6 +14,25 @@ import type { FileMetadata } from '@/shared/types'
  */
 class FilesService {
   /**
+   * Normalize a file URL/path for apiClient requests.
+   * apiClient.baseURL already ends with `/api`, so strip a leading `/api`
+   * to avoid `/api/api/files/...` requests.
+   */
+  private normalizeApiPath(url: string): string {
+    let path = url
+
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      try {
+        path = new URL(path).pathname
+      } catch {
+        return path
+      }
+    }
+
+    return path.replace(/^\/api(?=\/)/, '')
+  }
+
+  /**
    * Get list of files
    */
   async getFiles(params?: FilesListRequest): Promise<FileMetadata[]> {
@@ -41,7 +60,7 @@ class FilesService {
    * Download file from URL
    */
   async downloadFileFromUrl(url: string): Promise<Blob> {
-    const response = await apiClient.get(url, {
+    const response = await apiClient.get(this.normalizeApiPath(url), {
       responseType: 'blob',
     })
     return response.data
@@ -83,8 +102,13 @@ class FilesService {
    */
   async downloadNifti(url: string, filename?: string): Promise<void> {
     const name = filename ?? url.split('/').pop() ?? 'output.nii.gz'
-    const blob = await this.downloadFileFromUrl(url)
-    this.triggerDownload(blob, name)
+    try {
+      const blob = await this.downloadFileFromUrl(url)
+      this.triggerDownload(blob, name)
+    } catch (error) {
+      console.error('Failed to download NIfTI file:', error)
+      throw error
+    }
   }
 
   /**

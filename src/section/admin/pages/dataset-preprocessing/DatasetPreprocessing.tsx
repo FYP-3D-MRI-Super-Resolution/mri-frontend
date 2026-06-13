@@ -35,9 +35,9 @@ const DatasetPreprocessing = () => {
         {uploadSuccess && jobId ? (
           <UploadSuccess
             jobId={jobId}
-            message="Your dataset upload has been saved and preprocessing has started. You can return to the admin dashboard to review system activity."
-            primaryActionLabel="Back to Dashboard"
-            onViewJobs={() => navigate("/admin/dashboard")}
+            message="Your dataset upload has been saved and preprocessing has started. You can track progress on the Jobs page."
+            primaryActionLabel="View Jobs"
+            onViewJobs={() => navigate("/admin/jobs")}
             onUploadMore={() => {
               setUploadSuccess(false);
               setJobId(null);

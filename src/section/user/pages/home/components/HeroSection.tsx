@@ -20,8 +20,8 @@ const HeroSection = () => {
           <span className="text-cyan-300"> Preprocessing</span>
         </h1>
         <p className="text-lg text-dim max-w-xl">
-          Upload low-resolution MRI scans, run inference-ready preprocessing, and
-          inspect normalized volumes in an interactive 3D viewer.
+          Upload low-resolution MRI scans, run inference preprocessing and LoHiResGAN
+          super-resolution, then compare results in an interactive 3D viewer.
         </p>
       </div>
 

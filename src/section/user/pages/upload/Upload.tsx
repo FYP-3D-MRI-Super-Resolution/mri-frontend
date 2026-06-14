@@ -27,7 +27,7 @@ const Upload = () => {
         {uploadSuccess && jobId ? (
           <UploadSuccess
             jobId={jobId}
-            message="Your low-resolution scan has been uploaded and inference preprocessing has started. You can track progress in the Jobs page."
+            message="Your low-resolution scan has been uploaded. Preprocessing and LoHiResGAN super-resolution have started. Track progress on the Jobs page."
             onViewJobs={() => navigate('/app/jobs')}
             onUploadMore={() => {
               setUploadSuccess(false)

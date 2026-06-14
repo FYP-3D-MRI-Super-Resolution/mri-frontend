@@ -46,15 +46,15 @@ const Jobs = () => {
         <JobsHeader
           onRefresh={refetch}
           isRefreshing={isFetching}
-          title="Preprocessing Jobs"
-          description="Track inference preprocessing jobs for your uploaded scans."
+          title="Processing Jobs"
+          description="Track preprocessing and LoHiResGAN super-resolution jobs for your uploads."
         />
 
         {jobs.length === 0 ? (
           <JobsEmpty />
         ) : (
           <div className="space-y-4">
-            <JobsTable jobs={jobs as Job[]} viewActionLabel="View Scan" />
+            <JobsTable jobs={jobs as Job[]} viewActionLabel="View Results" />
             <JobsPagination
               page={page}
               totalPages={totalPages}

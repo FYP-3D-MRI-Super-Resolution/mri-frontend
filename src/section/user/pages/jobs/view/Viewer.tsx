@@ -15,8 +15,8 @@ interface ViewerProps {
 
 const Viewer = ({ variant = 'user' }: ViewerProps) => {
   const { jobId } = useParams<{ jobId: string }>()
-  const isComparisonMode = variant === 'admin'
-  const [viewMode, setViewMode] = useState<ViewMode>(isComparisonMode ? 'side-by-side' : 'single')
+  const isAdmin = variant === 'admin'
+  const [viewMode, setViewMode] = useState<ViewMode>(isAdmin ? 'side-by-side' : 'single')
   const [opacity, setOpacity] = useState(0.5)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [selectedVariant, setSelectedVariant] = useState<string>('')
@@ -26,36 +26,44 @@ const Viewer = ({ variant = 'user' }: ViewerProps) => {
   const outputFiles: OutputFileEntry[] = (job?.output_files ?? []) as OutputFileEntry[]
   const currentEntry = outputFiles[selectedIndex] ?? {}
 
-  const hrUrl = currentEntry.hr ?? job?.hr_file_url ?? ''
+  const srUrl = currentEntry.hr ?? job?.hr_file_url ?? ''
   const lrVariants = currentEntry.lr_variants ?? {}
-  const lrVariantKeys = Object.keys(lrVariants)
+  const preprocessedUrl = lrVariants.preprocessed ?? job?.lr_file_url ?? ''
+  const lrVariantKeys = Object.keys(lrVariants).filter((key) => key !== 'preprocessed')
   const lrVariantKeysStr = lrVariantKeys.join(',')
 
+  const userHasSrOutput = !isAdmin && !!preprocessedUrl && !!srUrl
+
   useEffect(() => {
-    if (!isComparisonMode || !lrVariantKeysStr) return
+    if (!isAdmin || !lrVariantKeysStr) return
     const keys = lrVariantKeysStr.split(',')
     if (keys.length > 0 && !selectedVariant) {
       const preferred = keys.find((k) => k === 'inplane_ds2') ?? keys[0]
       setSelectedVariant(preferred)
     }
-  }, [isComparisonMode, lrVariantKeysStr, selectedVariant])
+  }, [isAdmin, lrVariantKeysStr, selectedVariant])
 
   useEffect(() => {
     setSelectedIndex(0)
-    if (!isComparisonMode) {
-      setViewMode('single')
+
+    if (!isAdmin) {
+      setViewMode(userHasSrOutput ? 'side-by-side' : 'single')
       return
     }
 
     const files = (job?.output_files ?? []) as OutputFileEntry[]
     if (files.length > 0) {
-      const hasLR = Object.keys(files[0]?.lr_variants ?? {}).length > 0
+      const hasLR = Object.keys(files[0]?.lr_variants ?? {}).filter(
+        (key) => key !== 'preprocessed',
+      ).length > 0
       setViewMode(hasLR ? 'side-by-side' : 'hr-only')
     }
-  }, [job?.id, job?.output_files, isComparisonMode])
+  }, [job?.id, job?.output_files, isAdmin, userHasSrOutput])
 
-  const lrUrl = lrVariants[selectedVariant] ?? job?.lr_file_url ?? ''
-  const volumeUrl = hrUrl
+  const adminLrUrl = lrVariants[selectedVariant] ?? job?.lr_file_url ?? ''
+  const lrUrl = isAdmin ? adminLrUrl : preprocessedUrl
+  const hrUrl = srUrl
+  const volumeUrl = preprocessedUrl || srUrl
 
   if (isLoading) {
     return (
@@ -80,7 +88,11 @@ const Viewer = ({ variant = 'user' }: ViewerProps) => {
   return (
     <div className="px-4 py-8">
       <div className="w-full space-y-6">
-        <ViewerHeader jobId={jobId!} variant={variant} />
+        <ViewerHeader
+          jobId={jobId!}
+          variant={variant}
+          hasSrOutput={userHasSrOutput}
+        />
 
         <ViewerControls
           variant={variant}
@@ -93,6 +105,7 @@ const Viewer = ({ variant = 'user' }: ViewerProps) => {
           volumeUrl={volumeUrl}
           outputFiles={outputFiles}
           lrVariants={lrVariants}
+          userHasSrOutput={userHasSrOutput}
           onViewModeChange={setViewMode}
           onOpacityChange={setOpacity}
           onFileSelect={setSelectedIndex}
@@ -105,6 +118,7 @@ const Viewer = ({ variant = 'user' }: ViewerProps) => {
           lrUrl={lrUrl}
           hrUrl={hrUrl}
           volumeUrl={volumeUrl}
+          userHasSrOutput={userHasSrOutput}
         />
 
         {job.metrics && <ViewerMetrics metrics={job.metrics} />}

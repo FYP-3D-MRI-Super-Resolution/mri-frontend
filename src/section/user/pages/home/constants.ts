@@ -1,7 +1,7 @@
 export const HERO_STATS = [
-  { label: 'Pipeline', value: 'Automated', hint: 'Inference preprocessing' },
+  { label: 'Pipeline', value: 'Automated', hint: 'Preprocess + LoHiResGAN SR' },
   { label: 'Formats', value: 'NIfTI', hint: '.nii / .nii.gz' },
-  { label: 'Output', value: 'MNI-ready', hint: 'Normalized & registered' },
+  { label: 'Output', value: 'LR + SR', hint: 'Preprocessed & enhanced' },
 ] as const
 
 export const PIPELINE_STEPS = [
@@ -16,9 +16,14 @@ export const PIPELINE_STEPS = [
     badge: 'Step 02',
   },
   {
-    title: '3D Inspection',
-    desc: 'Review the preprocessed volume in an interactive viewer.',
+    title: 'LoHiResGAN SR',
+    desc: 'Run super-resolution on the preprocessed volume automatically.',
     badge: 'Step 03',
+  },
+  {
+    title: 'Compare Results',
+    desc: 'Review preprocessed input vs SR output in the 3D viewer.',
+    badge: 'Step 04',
   },
 ] as const
 

@@ -17,7 +17,7 @@ const ViewerHeader = ({
       {variant === 'admin'
         ? 'Compare HR reference volumes with simulated LR variants.'
         : hasSrOutput
-          ? 'Compare preprocessed input with LoHiResGAN super-resolution output.'
+          ? 'Compare preprocessed input with Res-SRDiff super-resolution output.'
           : 'Inspect your inference-ready preprocessed scan.'}
     </p>
     <p className="mt-1 text-sm text-dim">Job ID: {jobId}</p>

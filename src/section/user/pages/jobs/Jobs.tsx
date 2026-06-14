@@ -47,7 +47,7 @@ const Jobs = () => {
           onRefresh={refetch}
           isRefreshing={isFetching}
           title="Processing Jobs"
-          description="Track preprocessing and LoHiResGAN super-resolution jobs for your uploads."
+          description="Track preprocessing and Res-SRDiff super-resolution jobs for your uploads."
         />
 
         {jobs.length === 0 ? (

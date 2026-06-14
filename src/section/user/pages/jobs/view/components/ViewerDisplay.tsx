@@ -28,7 +28,7 @@ const ViewerDisplay = ({
     {variant === 'user' && userHasSrOutput && viewMode === 'side-by-side' && lrUrl && hrUrl && (
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         <MRIViewer fileUrl={lrUrl} title="Preprocessed (Input)" />
-        <MRIViewer fileUrl={hrUrl} title="Super-Resolution (Output)" />
+        <MRIViewer fileUrl={hrUrl} title="Res-SRDiff (Output)" />
       </div>
     )}
 
@@ -37,7 +37,7 @@ const ViewerDisplay = ({
     )}
 
     {variant === 'user' && userHasSrOutput && viewMode === 'hr-only' && hrUrl && (
-      <MRIViewer fileUrl={hrUrl} title="Super-Resolution (Output)" />
+      <MRIViewer fileUrl={hrUrl} title="Res-SRDiff (Output)" />
     )}
 
     {variant === 'user' && !userHasSrOutput && viewMode === 'single' && volumeUrl && (

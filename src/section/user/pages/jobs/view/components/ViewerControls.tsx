@@ -123,7 +123,7 @@ const ViewerControls = ({
                   ? 'Side by Side'
                   : mode === 'lr-only'
                     ? 'Preprocessed Only'
-                    : 'SR Output Only'
+                    : 'Res-SRDiff Only'
               return (
                 <button
                   key={mode}
@@ -152,7 +152,7 @@ const ViewerControls = ({
                 className="btn btn-secondary text-sm flex items-center gap-1"
                 title="Download super-resolution NIfTI file"
               >
-                ↓ SR Output
+                ↓ Res-SRDiff
               </button>
             )}
           </div>

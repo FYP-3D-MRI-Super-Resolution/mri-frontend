@@ -1,5 +1,5 @@
 export const HERO_STATS = [
-  { label: 'Pipeline', value: 'Automated', hint: 'Preprocess + LoHiResGAN SR' },
+  { label: 'Pipeline', value: 'Automated', hint: 'Preprocess + Res-SRDiff SR' },
   { label: 'Formats', value: 'NIfTI', hint: '.nii / .nii.gz' },
   { label: 'Output', value: 'LR + SR', hint: 'Preprocessed & enhanced' },
 ] as const
@@ -16,7 +16,7 @@ export const PIPELINE_STEPS = [
     badge: 'Step 02',
   },
   {
-    title: 'LoHiResGAN SR',
+    title: 'Res-SRDiff SR',
     desc: 'Run super-resolution on the preprocessed volume automatically.',
     badge: 'Step 03',
   },

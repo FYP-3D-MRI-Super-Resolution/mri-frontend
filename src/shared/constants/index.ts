@@ -64,10 +64,9 @@ export const API_ENDPOINTS = {
     DOWNLOAD: (id: string) => `/files/${id}/download`,
   },
 
-  // DICOM streaming endpoints (NIfTI → DICOM on-the-fly conversion)
+  // DICOM metadata (NIfTI → DICOM on-the-fly conversion; slice URLs come from /info)
   DICOM: {
     INFO: (dicomBase: string) => `${dicomBase}/info`,
-    SLICE: (dicomBase: string, index: number) => `${dicomBase}/slice/${index}`,
   },
 } as const
 

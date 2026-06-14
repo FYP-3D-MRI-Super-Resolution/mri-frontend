@@ -8,6 +8,7 @@ import { STATUS_COLORS } from '@/shared/constants'
 
 // Cornerstone / DICOM helpers
 export { ensureCornerstoneInitialized, toDicomBase } from './cornerstone'
+export { getApiOrigin, toWadoUriImageIds } from './api'
 
 /**
  * Format file size to human-readable format

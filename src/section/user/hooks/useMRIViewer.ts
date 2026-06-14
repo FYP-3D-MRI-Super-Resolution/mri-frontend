@@ -26,7 +26,7 @@ import {
   Enums as toolEnums,
 } from '@cornerstonejs/tools'
 import { filesService } from '@/section/user/services'
-import { ensureCornerstoneInitialized, toDicomBase } from '@/shared/utils'
+import { ensureCornerstoneInitialized, toDicomBase, toWadoUriImageIds } from '@/shared/utils'
 import type { Layout } from '@/section/user/pages/jobs/view/constants'
 
 const { ViewportType, OrientationAxis } = csEnums
@@ -139,15 +139,16 @@ export const useMRIViewer = (fileUrl: string): UseMRIViewerReturn => {
       const dicomPath = dicomBase.replace(/^\/api/, '')
       log(`Step 2/7 — Fetching DICOM info… (${dicomPath}/info)`)
 
-      const { num_slices } = await filesService.getDicomInfo(dicomBase)
+      const dicomInfo = await filesService.getDicomInfo(dicomBase)
       if (stale()) return
 
-      // ── Step 3: Build imageIds ────────────────────────────────────────────
-      log(`Step 3/7 — Building ${num_slices} imageIds…`)
-      const imageIds: string[] = Array.from(
-        { length: num_slices },
-        (_, i) => `wadouri:${dicomBase}/slice/${i}`,
-      )
+      if (!dicomInfo.slice_urls?.length) {
+        throw new Error('No DICOM slices returned from server')
+      }
+
+      // ── Step 3: Build imageIds (absolute URLs via VITE_API_URL origin) ───
+      log(`Step 3/7 — Building ${dicomInfo.slice_urls.length} imageIds…`)
+      const imageIds = toWadoUriImageIds(dicomInfo.slice_urls)
 
       // ── Step 4: Teardown previous engine ─────────────────────────────────
       log('Step 4/7 — Tearing down previous engine…')

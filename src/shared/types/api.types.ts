@@ -105,3 +105,8 @@ export interface FilesListResponse {
 export interface FilesDownloadRequest {
   file_id: string
 }
+
+export interface DicomInfoResponse {
+  num_slices: number
+  slice_urls: string[]
+}

@@ -1,5 +1,4 @@
-import type { ViewMode, ViewerVariant } from '../constants'
-import { VIEW_MODE_BUTTONS } from '../constants'
+import { VIEWER_COPY, VIEW_MODE_BUTTONS, type ViewMode, type ViewerVariant } from '../constants'
 import type { LRVariants, OutputFileEntry } from '@/shared/types'
 import { filesService } from '@/section/user/services/files.service'
 
@@ -42,6 +41,8 @@ const ViewerControls = ({
 }: ViewerControlsProps) => {
   const adminVariantKeys = Object.keys(lrVariants).filter((key) => key !== 'preprocessed')
   const isAdmin = variant === 'admin'
+  const userCopy = VIEWER_COPY.user
+  const adminCopy = VIEWER_COPY.admin
 
   const handleDownloadHR = async () => {
     if (!hrUrl) return
@@ -74,16 +75,14 @@ const ViewerControls = ({
     return (
       <div className="card space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <p className="text-sm text-dim">
-            Viewing the preprocessed scan prepared for downstream inference.
-          </p>
+          <p className="text-sm text-dim">{userCopy.pendingHint}</p>
           {volumeUrl && (
             <button
               onClick={handleDownloadVolume}
               className="btn btn-secondary text-sm flex items-center gap-1"
-              title="Download preprocessed NIfTI file"
+              title={userCopy.downloadInputTitle}
             >
-              ↓ Download Preprocessed NIfTI
+              {userCopy.downloadInputLong}
             </button>
           )}
         </div>
@@ -122,8 +121,8 @@ const ViewerControls = ({
                 mode === 'side-by-side'
                   ? 'Side by Side'
                   : mode === 'lr-only'
-                    ? 'Preprocessed Only'
-                    : 'Res-SRDiff Only'
+                    ? userCopy.outputOnly
+                    : userCopy.inputOnly
               return (
                 <button
                   key={mode}
@@ -137,22 +136,22 @@ const ViewerControls = ({
           </div>
 
           <div className="flex gap-2">
-            {lrUrl && (
-              <button
-                onClick={handleDownloadLR}
-                className="btn btn-secondary text-sm flex items-center gap-1"
-                title="Download preprocessed NIfTI file"
-              >
-                ↓ Preprocessed
-              </button>
-            )}
             {hrUrl && (
               <button
                 onClick={handleDownloadHR}
                 className="btn btn-secondary text-sm flex items-center gap-1"
-                title="Download super-resolution NIfTI file"
+                title={userCopy.downloadInputTitle}
               >
-                ↓ Res-SRDiff
+                {userCopy.downloadInput}
+              </button>
+            )}
+            {lrUrl && (
+              <button
+                onClick={handleDownloadLR}
+                className="btn btn-secondary text-sm flex items-center gap-1"
+                title={userCopy.downloadOutputTitle}
+              >
+                {userCopy.downloadOutput}
               </button>
             )}
           </div>
@@ -200,7 +199,7 @@ const ViewerControls = ({
       {adminVariantKeys.length > 0 && (
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
-            <label className="text-sm text-dim whitespace-nowrap">LR Variant:</label>
+            <label className="text-sm text-dim whitespace-nowrap">{adminCopy.variantLabel}</label>
             <select
               value={selectedVariant}
               onChange={(e) => onVariantChange(e.target.value)}
@@ -219,18 +218,18 @@ const ViewerControls = ({
               <button
                 onClick={handleDownloadHR}
                 className="btn btn-secondary text-sm flex items-center gap-1"
-                title="Download HR NIfTI file"
+                title={adminCopy.downloadInputTitle}
               >
-                ↓ HR
+                {adminCopy.downloadInput}
               </button>
             )}
             {lrUrl && (
               <button
                 onClick={handleDownloadLR}
                 className="btn btn-secondary text-sm flex items-center gap-1"
-                title={`Download LR variant: ${selectedVariant}`}
+                title={`${adminCopy.downloadOutputTitle}: ${selectedVariant}`}
               >
-                ↓ LR ({selectedVariant})
+                {adminCopy.downloadOutput} ({selectedVariant})
               </button>
             )}
           </div>

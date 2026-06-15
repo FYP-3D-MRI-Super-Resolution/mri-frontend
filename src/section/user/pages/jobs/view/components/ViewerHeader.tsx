@@ -1,4 +1,4 @@
-import type { ViewerVariant } from '../constants'
+import { VIEWER_COPY, type ViewerVariant } from '../constants'
 
 interface ViewerHeaderProps {
   jobId: string
@@ -10,18 +10,22 @@ const ViewerHeader = ({
   jobId,
   variant = 'user',
   hasSrOutput = false,
-}: ViewerHeaderProps) => (
-  <div>
-    <h1 className="text-3xl font-bold text-white">3D MRI Viewer</h1>
-    <p className="mt-2 text-dim">
-      {variant === 'admin'
-        ? 'Compare HR reference volumes with simulated LR variants.'
-        : hasSrOutput
-          ? 'Compare preprocessed input with Res-SRDiff super-resolution output.'
-          : 'Inspect your inference-ready preprocessed scan.'}
-    </p>
-    <p className="mt-1 text-sm text-dim">Job ID: {jobId}</p>
-  </div>
-)
+}: ViewerHeaderProps) => {
+  const copy = VIEWER_COPY[variant]
+
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-white">3D MRI Viewer</h1>
+      <p className="mt-2 text-dim">
+        {variant === 'admin'
+          ? copy.header
+          : hasSrOutput
+            ? VIEWER_COPY.user.headerWithSr
+            : VIEWER_COPY.user.headerPreprocessOnly}
+      </p>
+      <p className="mt-1 text-sm text-dim">Job ID: {jobId}</p>
+    </div>
+  )
+}
 
 export default ViewerHeader
